@@ -16,7 +16,6 @@ namespace SortingAlgorithms.ViewModels
             SortWindow window = new SortWindow();
             SortWindowVM vm = new SortWindowVM();
             window.DataContext = vm;
-            vm.GetReady(vm.Array);
             window.ShowDialog();
         });
     }

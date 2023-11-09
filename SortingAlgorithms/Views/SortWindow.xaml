@@ -36,15 +36,30 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
-                <Slider Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Width="400"/>
-                <ComboBox ItemsSource="{Binding SortNames}" SelectedItem="{Binding SortName}"  Grid.Row="0" Grid.Column="1" Margin="15,10,15,10"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Log" Foreground="#FFFEF7" FontSize="20"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="поянения для долбоеба" Foreground="#FFFEF7" FontSize="20"/>
-                <Button Content="Start" Command="{Binding Start}" Grid.Column="0" Grid.Row="2" Style="{DynamicResource RoundedButton}"/>
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Sorting algorithm:" FontSize="20" Foreground="White" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <ComboBox ItemsSource="{Binding SortNames}" SelectedItem="{Binding SortName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="15" Grid.Row="0" Grid.Column="1" Margin="15,10,15,10"/>
+                    <TextBlock Text="Delay in seconds:" FontSize="20" Foreground="#FFFEF7" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox Text="{Binding Delay}" Grid.Column="1" Grid.Row="1" FontSize="15" Margin="15,10,15,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                </Grid>
+                <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Visible">
+                    <ItemsControl Foreground="White" ItemsSource="{Binding Comments}" Padding="15,5,5,10">
+
+                    </ItemsControl>
+                </ScrollViewer>
+                <Button Content="Сортировать" Command="{Binding Start}" Grid.Column="1" Grid.Row="1" Style="{DynamicResource RoundedButton}" Margin="5,0,5,0"/>
+                <Button Content="Взять массив из файла" Command="{Binding LoadArray}" Grid.Column="0" Grid.Row="1" Style="{DynamicResource RoundedButton}" Margin="5,0,5,0"/>
             </Grid>
         </Grid>
     </Grid>
