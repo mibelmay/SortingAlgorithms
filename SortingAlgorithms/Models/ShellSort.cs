@@ -18,8 +18,10 @@ namespace SortingAlgorithms.Models
         public void ShellSortAlgorithm(List<Element> vector)
         {
             int step = vector.Count / 2;
+            string comment = $"Шаг для сравнения: длина массива / 2 = {vector.Count} / 2 = {step}\n";
             while (step >= 1)
             {
+                comment += $"Сравниваем попарно элементы массива с шагом {step} \n";
                 for (int i = step; i < vector.Count; i++)
                 {
                     int j = i;
@@ -28,13 +30,14 @@ namespace SortingAlgorithms.Models
                         Element temp = vector[j];
                         vector[j] = vector[j - step];
                         vector[j - step] = temp;
-
-                        Movements.Add(new Movement(Element.CopyElements(vector) ,vector[j].Id, vector[j - step].Id));
-
+                        comment += $"Меняем элементы {vector[j].Data} и {vector[j-step].Data} местами";
+                        Movements.Add(new Movement(Element.CopyElements(vector) ,vector[j].Id, vector[j - step].Id, comment));
+                        comment = "";
                         j -= step;
                     }
                 }
                 step = step / 2;
+                comment += $"Прошли весь массив, теперь уменьшаем шаг: step / 2 = {step}\n";
             }
         }
     }

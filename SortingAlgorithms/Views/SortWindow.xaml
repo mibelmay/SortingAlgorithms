@@ -53,7 +53,7 @@
                     <TextBlock Text="Delay in seconds:" FontSize="20" Foreground="#FFFEF7" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBox Text="{Binding Delay}" Grid.Column="1" Grid.Row="1" FontSize="15" Margin="15,10,15,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                 </Grid>
-                <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Visible">
+                <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Auto">
                     <ItemsControl Foreground="White" ItemsSource="{Binding Comments}" Padding="15,5,5,10">
 
                     </ItemsControl>

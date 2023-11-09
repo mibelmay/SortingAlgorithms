@@ -8,15 +8,16 @@ namespace SortingAlgorithms.Models
 {
     public class Movement
     {
-        public int IdFrom { get; set; }
-        public int IdTo { get; set; }
-        public List<Element> Elements { get; set; }
-        //public int[] Elements { get; set; }
-        public Movement(List<Element> items, int idFrom, int idTo) 
+        public int IdFrom { get; }
+        public int IdTo { get; }
+        public List<Element> Elements { get; }
+        public string Comment;
+        public Movement(List<Element> items, int idFrom, int idTo, string comment = "") 
         {
             Elements = items;
             IdFrom= idFrom;
             IdTo= idTo;
+            Comment= comment;
         }
     }
 }

@@ -111,6 +111,10 @@ namespace SortingAlgorithms.ViewModels
                 column.StrokeThickness = 1;
                 Canvas.Children.Add(column);
             }
+            if (_movement != null)
+            {
+                Comments.Add(_movement.Comment);
+            }
         }
 
         public void SelectSort()
@@ -133,19 +137,9 @@ namespace SortingAlgorithms.ViewModels
             {
                 _movement = movement;
                 GetReady(movement.Elements);
-                Comments.Add("Николаев дебил");
                 await Task.Delay((int)(delayInSeconds * 1000));
             }
         }
-        //private void Reload()
-        //{
-        //    List<string> comments = new List<string>();
-        //    foreach(var line in _comments)
-        //    {
-        //        _comments.Add(line);
-        //    }
-        //    Comments = comments;
-        //}
 
         public bool Check()
         {
