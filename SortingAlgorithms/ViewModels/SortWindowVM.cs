@@ -57,16 +57,7 @@ namespace SortingAlgorithms.ViewModels
         }
         private double delayInSeconds;
         public ObservableCollection<string> Comments { get; set; } = new ObservableCollection<string>();
-        //private List<string> _comments= new List<string>();
-        //public List<string> Comments
-        //{ 
-        //    get { return _comments; }
-        //    set
-        //    {
-        //        _comments = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+
         public List<Element> Array { get; set; } // максимум/минимум 100/-100
         private Movement _movement = null;
 
@@ -85,7 +76,7 @@ namespace SortingAlgorithms.ViewModels
         public void GetReady(List<Element> array)
         {
             Canvas.Children.Clear();
-            int columnWidth = 15; //870 / _array.Length;
+            int columnWidth = 15;
             int max = array.Max(x => x.Data);
             int min = array.Min(x => x.Data);
             double columnHeight = Math.Abs(max) > Math.Abs(min) ? 235 / Math.Abs(max) : 235 / Math.Abs(min);
@@ -139,6 +130,7 @@ namespace SortingAlgorithms.ViewModels
                 GetReady(movement.Elements);
                 await Task.Delay((int)(delayInSeconds * 1000));
             }
+            Comments.Add("Массив отсортирован!");
         }
 
         public bool Check()
