@@ -20,7 +20,7 @@ namespace SortingAlgorithms.Models
             {
                 for (int j = i + 1; j < words.Length; j++)
                 {
-                    if (string.Compare(words[i], words[j], StringComparison.OrdinalIgnoreCase) > 0)
+                    if (string.Compare(words[i], words[j]) > 0)
                     {
                         string temp = words[i];
                         words[i] = words[j];

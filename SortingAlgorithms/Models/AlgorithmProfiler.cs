@@ -75,13 +75,13 @@ namespace SortingAlgorithms.Models
 
             foreach (string word in arrayOfwords)
             {
-                if (wordCounts.ContainsKey(word))
+                if (wordCounts.ContainsKey(word.ToLower()))
                 {
-                    wordCounts[word] += 1;
+                    wordCounts[word.ToLower()] += 1;
                 }
                 else
                 {
-                    wordCounts[word] = 1;
+                    wordCounts[word.ToLower()] = 1;
                 }
             }
             return wordCounts;

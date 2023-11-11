@@ -21,7 +21,7 @@ namespace SortingAlgorithms.Models
                 string key = array[i];
                 int j = i - 1;
 
-                while (j >= 0 && string.Compare(array[j], key, StringComparison.OrdinalIgnoreCase) > 0)
+                while (j >= 0 && string.Compare(array[j], key) > 0)
                 {
                     array[j + 1] = array[j];
                     j = j - 1;

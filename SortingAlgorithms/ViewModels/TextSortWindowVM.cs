@@ -54,6 +54,11 @@ namespace SortingAlgorithms.ViewModels
 
         public ICommand Sort => new CommandDelegate(param =>
         {
+            if(!Check())
+            {
+                MessageBox.Show("Выберите сортировку");
+                return;
+            }
             SelectSort();
             Result result = SelectSort();
             ShowSorted(result.Sorted);
@@ -119,5 +124,12 @@ namespace SortingAlgorithms.ViewModels
                 return;
             }
         });
+
+        private bool Check()
+        {
+            if (SortName == null || SortName == "") 
+                return false;
+            return true;
+        }
     }
 }
