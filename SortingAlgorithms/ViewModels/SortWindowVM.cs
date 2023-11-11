@@ -11,7 +11,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using static System.Net.Mime.MediaTypeNames;
-
 namespace SortingAlgorithms.ViewModels
 {
     public class SortWindowVM : ViewModel
@@ -65,6 +64,7 @@ namespace SortingAlgorithms.ViewModels
 
         public ICommand Start => new CommandDelegate(param =>
         {
+            Comments.Clear();
             //старт отрисовки
             if (!Check())
             {
@@ -80,20 +80,31 @@ namespace SortingAlgorithms.ViewModels
             int columnWidth = 15;
             int max = array.Max(x => x.Data);
             int min = array.Min(x => x.Data);
-            double columnHeight = Math.Abs(max) > Math.Abs(min) ? 235 / Math.Abs(max) : 235 / Math.Abs(min);
+            double columnHeight = Math.Abs(max) > Math.Abs(min) ? 200 / Math.Abs(max) : 200 / Math.Abs(min);
             double xPosition = (870 - (array.Count + 2) * columnWidth) / 2;
 
             foreach (Element item in array)
             {
+                TextBlock textBlock = new TextBlock();
+                textBlock.Text = item.Data.ToString();
+                textBlock.FontSize = 10;
+                textBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
+                
                 Rectangle column = new Rectangle();
                 column.Width = columnWidth;
                 column.Height = columnHeight * Math.Abs(item.Data);
                 if (item.Data < 0)
                 {
+                    Canvas.SetLeft(textBlock, xPosition);
+                    Canvas.SetBottom(textBlock, -215 + item.Data * columnHeight - 15);
+                    Canvas.Children.Add(textBlock);
                     Canvas.SetBottom(column, -215 + item.Data * columnHeight);
                 }
                 else
                 {
+                    Canvas.SetLeft(textBlock, xPosition);
+                    Canvas.SetBottom(textBlock, -215 + item.Data * columnHeight);
+                    Canvas.Children.Add(textBlock);
                     Canvas.SetBottom(column, -215);
                 }
                 Canvas.SetLeft(column, xPosition);

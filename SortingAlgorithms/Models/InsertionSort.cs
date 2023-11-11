@@ -23,21 +23,23 @@ namespace SortingAlgorithms.Models
                 Element key = input[i];
                 int j = i - 1;
 
-                comment += $"Сравниваем {key.Data} с {input[j].Data}\n";
+                comment += $"Сравниваем {key.Data} с элементами, стоящими слева\n";
                 while (j >= 0 && input[j].Data > key.Data)
                 {
-                    comment += $"{input[j].Data} > {key.Data}";
-                    Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j].Id, comment));
+                    comment += $"{input[j].Data} > {key.Data}\n" +
+                        $"смещаем {input[j].Data} вправо";
+                    Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id, comment));
                     comment = "";
 
                     input[j + 1] = input[j];
+                    Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id));
                     j = j - 1;
-
                 }
-                input[j + 1] = key;
-                comment += $"Вставляем {key.Data} на правильное место\n";
+                comment += $"Ставим {key.Data} на правильное место";
                 Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id, comment));
                 comment = "";
+                input[j + 1] = key;
+                Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id));
             }
         }
     }
