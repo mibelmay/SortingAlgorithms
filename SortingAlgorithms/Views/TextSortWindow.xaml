@@ -1,0 +1,52 @@
+﻿<Window x:Class="SortingAlgorithms.Views.TextSortWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SortingAlgorithms.Views"
+        xmlns:vm="clr-namespace:SortingAlgorithms.ViewModels"
+        mc:Ignorable="d"
+        Title="TextSortWindow" Height="500" Width="800" Background="#222222">
+    <Window.DataContext>
+        <vm:TextSortWindowVM/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Button Command="{Binding LoadText}" Content="Взять текст из файла" Grid.Column="1" Grid.Row="1" Style="{DynamicResource RoundedButton}" />
+        <Button Command="{Binding Sort}" Content="Сортировать" Grid.Column="3" Grid.Row="1" Style="{DynamicResource RoundedButton}" />
+        
+        <ScrollViewer Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <TextBlock Text="{Binding InitialText}" Foreground="White" TextWrapping="Wrap" FontSize="13"/>
+        </ScrollViewer>
+        <ScrollViewer Grid.Column="3" Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <TextBlock Text="{Binding SortedText}" FontSize="13" Foreground="White" TextWrapping="Wrap"/>
+        </ScrollViewer>
+        
+
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Sorting Algotithm:" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="0"/>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding SortNames}" SelectedItem="{Binding SortName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
+        </Grid>
+       
+    </Grid>
+</Window>

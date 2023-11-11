@@ -18,15 +18,14 @@
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="20*"/>
-            <RowDefinition Height="30*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Command="{Binding OpenSortWindow}" Content="Start" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}" Margin="5,0,5,0"/>
-        <TextBlock Text="Алгоритмы внутренней сортировки" FontSize="20" Foreground="#cfcfcf" Grid.Column="1" Grid.Row="0"/>
-        <TextBlock Text="Ханойские башни" FontSize="20" Foreground="#cfcfcf" Grid.Column="2" Grid.Row="0"/>
+        <Button Command="{Binding OpenSortWindow}" Content="Алгоритмы внутренней сортировки" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
+        <Button Command="{Binding OpenTextSortWindow}" Content="Алгоритмы внешней сортировки" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
 
-        
-       
+
+
     </Grid>
 </Window>

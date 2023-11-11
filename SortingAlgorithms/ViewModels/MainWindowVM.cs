@@ -18,5 +18,13 @@ namespace SortingAlgorithms.ViewModels
             window.DataContext = vm;
             window.ShowDialog();
         });
+
+        public ICommand OpenTextSortWindow => new CommandDelegate(param =>
+        {
+            TextSortWindow window = new TextSortWindow();
+            TextSortWindowVM vm = new TextSortWindowVM();
+            window.DataContext = vm;
+            window.ShowDialog();
+        });
     }
 }
