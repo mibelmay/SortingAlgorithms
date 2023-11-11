@@ -107,8 +107,6 @@ namespace SortingAlgorithms.ViewModels
                     column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
                     column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
                 }
-                column.RadiusX = 5;
-                column.RadiusY = 5;
                 column.StrokeThickness = 1;
                 Canvas.Children.Add(column);
             }
