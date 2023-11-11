@@ -23,6 +23,7 @@ namespace SortingAlgorithms.Models
                         throw new Exception("Файл не содержит массив целых чисел");
                     }
                     list.Add(new Element(index, element));
+                    index++;
                 }
             }
             return list;

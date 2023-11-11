@@ -27,11 +27,14 @@ namespace SortingAlgorithms.Models
                     int j = i;
                     while (j >= step && vector[j - step].Data > vector[j].Data)
                     {
+                        comment += $"{vector[j-step].Data} > {vector[j].Data}";
+                        Movements.Add(new Movement(Element.CopyElements(vector), vector[j].Id, vector[j - step].Id, comment));
+                        comment = "";
                         Element temp = vector[j];
                         vector[j] = vector[j - step];
                         vector[j - step] = temp;
                         comment += $"Меняем элементы {vector[j].Data} и {vector[j-step].Data} местами";
-                        Movements.Add(new Movement(Element.CopyElements(vector) ,vector[j].Id, vector[j - step].Id, comment));
+                        Movements.Add(new Movement(Element.CopyElements(vector), vector[j].Id, vector[j - step].Id, comment));
                         comment = "";
                         j -= step;
                     }

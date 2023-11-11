@@ -97,8 +97,18 @@ namespace SortingAlgorithms.ViewModels
                 }
                 Canvas.SetLeft(column, xPosition);
                 xPosition += columnWidth + 2;
-                column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#9b2226");
-                column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#9b2226");
+                if(_movement != null && (_movement.IdFrom == item.Id || _movement.IdTo == item.Id))
+                {
+                    column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#f6bd60");
+                    column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#f6bd60");
+                }
+                else
+                {
+                    column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
+                    column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
+                }
+                column.RadiusX = 5;
+                column.RadiusY = 5;
                 column.StrokeThickness = 1;
                 Canvas.Children.Add(column);
             }
