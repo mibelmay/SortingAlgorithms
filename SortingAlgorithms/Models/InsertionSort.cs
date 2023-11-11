@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SortingAlgorithms.Models
 {
@@ -25,6 +26,7 @@ namespace SortingAlgorithms.Models
                 {
                     array[j + 1] = array[j];
                     j = j - 1;
+
                 }
                 array[j + 1] = key;
             }
