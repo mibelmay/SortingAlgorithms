@@ -3,32 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace SortingAlgorithms.Models
 {
-    public class InsertionSort : IAlgorithm<string>
+    public class InsertionSort
     {
-        public void Execute(string[] array)
+        public List<Movement> Movements = new List<Movement>();
+
+        public void Execute(List<Element> input)
         {
-            InsertionSortAlgorithm(array);
+            InsertionSortAlgorithm(input);
         }
 
-        public void InsertionSortAlgorithm(string[] array)
+        public void InsertionSortAlgorithm(List<Element> input)
         {
-            int n = array.Length;
-            for (int i = 1; i < n; ++i)
+            string comment = "";
+            for (int i = 1; i < input.Count; i++)
             {
-                string key = array[i];
+                Element key = input[i];
                 int j = i - 1;
 
-                while (j >= 0 && string.Compare(array[j], key) > 0)
+                comment += $"Сравниваем {key.Data} с {input[j].Data}\n";
+                while (j >= 0 && input[j].Data > key.Data)
                 {
-                    array[j + 1] = array[j];
+                    comment += $"{input[j].Data} > {key.Data}";
+                    Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j].Id, comment));
+                    comment = "";
+
+                    input[j + 1] = input[j];
                     j = j - 1;
 
                 }
-                array[j + 1] = key;
+                input[j + 1] = key;
+                comment += $"Вставляем {key.Data} на правильное место\n";
+                Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id, comment));
+                comment = "";
             }
         }
     }

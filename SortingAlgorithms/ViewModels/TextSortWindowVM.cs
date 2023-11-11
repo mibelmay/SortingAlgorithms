@@ -72,7 +72,7 @@ namespace SortingAlgorithms.ViewModels
             switch (SortName)
             {
                 case "Insertion Sort":
-                    InsertionSort insertionSort = new InsertionSort();
+                    InsertionTextSort insertionSort = new InsertionTextSort();
                     return profiler.RunExtra(words, insertionSort);
                 case "ABC sort":
                     BubbleSort bubbleSort = new BubbleSort();
