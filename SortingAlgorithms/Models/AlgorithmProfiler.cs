@@ -16,14 +16,6 @@ namespace SortingAlgorithms.Models
         public Dictionary<string, int>? WordsOfCount { get; set; }
 
 
-        public void PrintSorted()
-        {
-            foreach (var item in Sorted)
-            {
-                Console.WriteLine(item);
-            }
-        }
-
         public void PrintWordsOfCount()
         {
             foreach (var word in WordsOfCount)

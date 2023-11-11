@@ -47,6 +47,8 @@
             <TextBlock Text="Sorting Algotithm:" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="0"/>
             <ComboBox Grid.Column="1" ItemsSource="{Binding SortNames}" SelectedItem="{Binding SortName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="15"/>
         </Grid>
-       
+
+        <TextBlock Text="Dictionary:" FontSize="15" VerticalAlignment="Center" Foreground="White" Grid.Column="3" Grid.Row="4"/>
+        <DataGrid Name="dataGrid" ItemsSource="{Binding DataTable}" Foreground="#90a955" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"  Grid.Column="3" Grid.Row="5"  AutoGenerateColumns="True" CanUserAddRows="False"/>
     </Grid>
 </Window>

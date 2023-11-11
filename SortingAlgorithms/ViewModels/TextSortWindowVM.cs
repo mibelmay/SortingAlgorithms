@@ -1,6 +1,7 @@
 ﻿using SortingAlgorithms.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,21 +41,39 @@ namespace SortingAlgorithms.ViewModels
             }
         }
 
+        private DataTable _dataTable;
+        public DataTable DataTable
+        {
+            get { return _dataTable; }
+            set
+            {
+                _dataTable = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand Sort => new CommandDelegate(param =>
         {
             SelectSort();
+            Result result = SelectSort();
+            ShowSorted(result.Sorted);
+            ShowDictionary(result.WordsOfCount);
         });
-        private void SelectSort()
+        private Result SelectSort()
         {
             AlgorithmProfiler profiler = new AlgorithmProfiler();
+            Result result = new Result();
             string[] words = _initialText.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
             switch (SortName)
             {
                 case "Insertion Sort":
                     InsertionSort insertionSort = new InsertionSort();
-                    Result result = profiler.RunExtra(words, insertionSort);
-                    ShowSorted(result.Sorted);
-                    break;
+                    return profiler.RunExtra(words, insertionSort);
+                case "ABC sort":
+                    BubbleSort bubbleSort = new BubbleSort();
+                    return profiler.RunExtra(words, bubbleSort);
+                default:
+                    return null;
             }
         }
 
@@ -66,6 +85,19 @@ namespace SortingAlgorithms.ViewModels
                 stringBuilder.Append(word + " ");
             }
             SortedText = stringBuilder.ToString();
+        }
+
+        private void ShowDictionary(Dictionary<string, int> wordsOfCount)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add(new DataColumn("word"));
+            dataTable.Columns.Add(new DataColumn("count"));
+
+            foreach(var pair in wordsOfCount)
+            {
+                dataTable.Rows.Add(pair.Key, pair.Value);
+            }
+            DataTable = dataTable;
         }
 
         public ICommand LoadText => new CommandDelegate(param =>
