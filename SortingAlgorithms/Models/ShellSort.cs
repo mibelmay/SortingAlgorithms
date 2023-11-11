@@ -15,7 +15,7 @@ namespace SortingAlgorithms.Models
             ShellSortAlgorithm(input);
         }
 
-        public void ShellSortAlgorithm(List<Element> vector)
+        private void ShellSortAlgorithm(List<Element> vector)
         {
             int step = vector.Count / 2;
             string comment = $"Шаг для сравнения: длина массива / 2 = {vector.Count} / 2 = {step}\n";

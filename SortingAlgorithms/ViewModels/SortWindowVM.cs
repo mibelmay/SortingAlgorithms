@@ -15,7 +15,7 @@ namespace SortingAlgorithms.ViewModels
 {
     public class SortWindowVM : ViewModel
     {
-        private List<string> _sortNames = new List<string>() { "Shell Sort" };
+        private List<string> _sortNames = new List<string>() { "Shell Sort" , "Heap Sort" };
         public List<string> SortNames
         {
             get { return _sortNames; }
@@ -124,6 +124,11 @@ namespace SortingAlgorithms.ViewModels
                     ShellSort shellSort = new ShellSort();
                     shellSort.Execute(Element.CopyElements(Array));
                     Animate(shellSort.Movements);
+                    break;
+                case "Heap Sort":
+                    HeapSort heapsort = new HeapSort();
+                    heapsort.Execute(Element.CopyElements(Array));
+                    Animate(heapsort.Movements);
                     break;
                 default:
                     break;
