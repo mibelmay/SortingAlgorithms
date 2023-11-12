@@ -13,6 +13,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.IO.Packaging;
 using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Xml.Linq;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -21,7 +23,7 @@ namespace SortingAlgorithms.ViewModels
         private string _folderPath = "";
         private TableScheme _scheme;
         private Table _table;
-        public List<string> SortNames { get; set; } = new List<string>() { "Прямое слияние" };
+        public List<string> SortNames { get; set; } = new List<string>() { "Прямое слияние" , "Трехпутевое слияние"};
         private string _selectedSort;
         public string SelectedSort
         {
@@ -62,6 +64,15 @@ namespace SortingAlgorithms.ViewModels
                 OnPropertyChanged();
             }
         }
+        private DataTable _dataTableC = new DataTable();
+        public DataTable DataTableC
+        {
+            get { return _dataTableC; }
+            set
+            {
+                _dataTableC = value; OnPropertyChanged();
+            }
+        }
         private List<string> _columnNames;
         public List<string> ColumnNames
         {
@@ -96,6 +107,9 @@ namespace SortingAlgorithms.ViewModels
             {
                 case "Прямое слияние":
                     DoDirectMerge();
+                    break;
+                case "Трехпутевое слияние":
+                    DoThreeWayMerge();
                     break;
             }
         }
@@ -193,7 +207,7 @@ namespace SortingAlgorithms.ViewModels
                 int positionA = 0;
                 int positionB = 0;
                 int currentPA = 0;
-                int currentPB = _iterations;
+                int currentPB = 0;
                 while(true)
                 {
                     if (endA && endB)
@@ -384,6 +398,300 @@ namespace SortingAlgorithms.ViewModels
                 return true;
             }
             return false;
+        }
+
+        private void DoThreeWayMerge() //добавляет колонки во вспомогательные таблицы
+        {
+            _iterations = 1;
+            _segments = 1;
+            DataTable dataTableA = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                dataTableA.Columns.Add(column.Name);
+            }
+            DataTableA.Rows.Clear();
+            DataTableA = dataTableA;
+            DataTable dataTableB = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                dataTableB.Columns.Add(column.Name);
+            }
+            DataTableB.Rows.Clear();
+            DataTableB = dataTableB;
+            DataTable dataTableC = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                dataTableC.Columns.Add(column.Name);
+            }
+            DataTableC.Rows.Clear();
+            DataTableC = dataTableC;
+            DoThreeWaySort();
+        }
+
+        //Three-way merge
+        async void DoThreeWaySort()
+        {
+            while (true)
+            {
+                _segments = 1;
+                int count = 0;
+                int fileNo = 1;
+                foreach (DataRow row in DataTable.Rows)
+                {
+                    if (fileNo > 3)
+                    {
+                        fileNo = 1;
+
+                    }
+                    if (fileNo == 1)
+                    {
+                        AddRowInTable(row, DataTableA);
+                        await Task.Delay(10);
+                    }
+                    else if (fileNo == 2)
+                    {
+                        AddRowInTable(row, DataTableB);
+                        await Task.Delay(10);
+                    }
+                    else if (fileNo == 3)
+                    {
+                        AddRowInTable(row, DataTableC);
+                        await Task.Delay(10);
+                    }
+                    count++;
+                    if(count == _iterations)
+                    {
+                        fileNo++;
+                        count = 0;
+                        _segments++;
+                    }
+                }
+
+                if (_segments == 1)
+                {
+                    break;
+                }
+
+                DataTable.Rows.Clear();
+                DataRow newRowA = DataTable.NewRow();
+                DataRow newRowB = DataTable.NewRow();
+                DataRow newRowC = DataTable.NewRow();
+                int counterA = _iterations;
+                int counterB = _iterations;
+                int counterC = _iterations;
+                bool pickedA = false, pickedB = false, pickedC = false, endA = false, endB = false, endC = false;
+                int positionA = 0; int positionB = 0; int positionC = 0;
+                int currentPA = 0; int currentPB = 0; int currentPC = 0;
+                while (true)
+                {
+                    if (endA && endB && endC)
+                    {
+                        break;
+                    }
+
+                    if (counterA == 0 && counterB == 0 && counterC == 0)
+                    {
+                        counterA = _iterations;
+                        counterB = _iterations;
+                        counterC = _iterations;
+                    }
+
+                    if (positionA != DataTableA.Rows.Count)
+                    {
+                        if (counterA > 0)
+                        {
+                            if (!pickedA)
+                            {
+                                newRowA = DataTableA.Rows[positionA];
+                                positionA += 1;
+                                pickedA = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        endA = true;
+                    }
+
+                    if (positionB != DataTableB.Rows.Count)
+                    {
+                        if (counterB > 0)
+                        {
+                            if (!pickedB)
+                            {
+                                newRowB = DataTableB.Rows[positionB];
+                                positionB += 1;
+                                pickedB = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        endB = true;
+                    }
+
+                    if (positionC != DataTableC.Rows.Count)
+                    {
+                        if (counterC > 0)
+                        {
+                            if (!pickedC)
+                            {
+                                newRowC = DataTableC.Rows[positionC];
+                                positionC += 1;
+                                pickedC = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        endC = true;
+                    }
+
+                    if (endA && endB && endC && pickedA == false && pickedB == false && pickedC == false)
+                    {
+                        break;
+                    }
+
+                    if (pickedA)
+                    {
+                        if (pickedB)
+                        {
+                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                            string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
+                            string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
+                            if (CompareDifferentTypes(tempA, tempB))
+                            {
+                                if (pickedC)
+                                {
+                                    string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                                    if (CompareDifferentTypes(tempA, tempC))
+                                    {
+                                        AddRowInTable(newRowA, DataTable);
+                                        counterA--;
+                                        pickedA = false;
+                                        await Task.Delay(10);
+                                    }
+                                    else
+                                    {
+                                        AddRowInTable(newRowC, DataTable);
+                                        counterC--;
+                                        pickedC = false;
+                                        await Task.Delay(10);
+                                    }
+                                }
+                                else
+                                {
+                                    AddRowInTable(newRowA, DataTable);
+                                    counterA--;
+                                    pickedA = false;
+                                    await Task.Delay(10);
+                                }
+                            }
+                            else
+                            {
+                                if (pickedC)
+                                {
+                                    string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                                    if (CompareDifferentTypes(tempB, tempC))
+                                    {
+                                        AddRowInTable(newRowB, DataTable);
+                                        counterB--;
+                                        pickedB = false;
+                                        await Task.Delay(10);
+                                    }
+                                    else
+                                    {
+                                        AddRowInTable(newRowC, DataTable);
+                                        counterC--;
+                                        pickedC = false;
+                                        await Task.Delay(10);
+                                    }
+                                }
+                                else
+                                {
+                                    AddRowInTable(newRowB, DataTable);
+                                    counterB--;
+                                    pickedB = false;
+                                    await Task.Delay(10);
+                                }
+                            }
+                        }
+                        else if (pickedC)
+                        {
+                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                            string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
+                            string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                            if (CompareDifferentTypes(tempA, tempC))
+                            {
+                                AddRowInTable(newRowA, DataTable);
+                                counterA--;
+                                pickedA = false;
+                                await Task.Delay(10);
+                            }
+                            else
+                            {
+                                AddRowInTable(newRowC, DataTable);
+                                counterC--;
+                                pickedC = false;
+                                await Task.Delay(10);
+                            }
+                        }
+                        else
+                        {
+                            AddRowInTable(newRowA, DataTable);
+                            counterA--;
+                            pickedA = false;
+                            await Task.Delay(10);
+                        }
+                    }
+                    else if (pickedB)
+                    {
+                        if (pickedC)
+                        {
+                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                            string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
+                            string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                            if (CompareDifferentTypes(tempB, tempC))
+                            {
+                                AddRowInTable(newRowB, DataTable);
+                                counterB--;
+                                pickedB = false;
+                                await Task.Delay(10);
+                            }
+                            else
+                            {
+                                AddRowInTable(newRowC, DataTable);
+                                counterC--;
+                                pickedC = false;
+                                await Task.Delay(10);
+                            }
+                        }
+                        else
+                        {
+                            AddRowInTable(newRowB, DataTable);
+                            counterB--;
+                            pickedB = false;
+                            await Task.Delay(10);
+                        }
+                    }
+                    else if (pickedC)
+                    {
+                        AddRowInTable(newRowC, DataTable);
+                        counterC--;
+                        pickedC = false;
+                        await Task.Delay(10);
+                    }
+                    currentPA += positionA;
+                    currentPB += positionB;
+                    currentPC += positionC;
+                }
+                _iterations *= 2; // увеличиваем размер серии в 2 раза
+                DataTableA.Rows.Clear();
+                DataTableB.Rows.Clear();
+                DataTableC.Rows.Clear();
+            }
+            ChangeMainTable();
+            TableReader.SaveChangesToCsv(_table, _folderPath);
         }
     }
 }
