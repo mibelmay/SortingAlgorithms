@@ -23,7 +23,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Command="{Binding OpenSortWindow}" Content="Алгоритмы внутренней сортировки" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
-        <Button Command="{Binding OpenTextSortWindow}" Content="Алгоритмы внешней сортировки" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
+        <Button Command="{Binding OpenOuterSortWindow}" Content="Алгоритмы внешней сортировки" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
+        <Button Command="{Binding OpenTextSortWindow}" Content="Алгоритмы сортировки текста" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Style="{DynamicResource RoundedButton}"/>
 
 
 

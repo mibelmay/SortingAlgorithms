@@ -9,6 +9,7 @@ namespace SortingAlgorithms.Models
 {
     public class MergedSort
     {
+        private string comment = "";
         public List<Movement> Movements = new List<Movement>();
 
         public void Execute(List<Element> input)
@@ -31,6 +32,8 @@ namespace SortingAlgorithms.Models
 
         private void Merge(List<Element> input, int left, int mid, int right)
         {
+            comment += $"Рассматриваем подмассивы:\n" +
+                $"[{input[left].Data} - {input[mid].Data}] и [{input[mid+1].Data} - {input[right].Data}]";
             int n1 = mid - left + 1;
             int n2 = right - mid;
 
@@ -45,7 +48,7 @@ namespace SortingAlgorithms.Models
 
             int iLeft = 0, iRight = 0, k = left;
 
-            string comment = $"Объединяем отсортированные массивы: [{left} - {mid}] и [{mid + 1} - {right}]\n";
+            comment += $"Объединяем отсортированные массивы: [{left} - {mid}] и [{mid + 1} - {right}]\n";
 
             while (iLeft < n1 && iRight < n2)
             {

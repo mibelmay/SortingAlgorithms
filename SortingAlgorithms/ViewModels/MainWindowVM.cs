@@ -26,5 +26,13 @@ namespace SortingAlgorithms.ViewModels
             window.DataContext = vm;
             window.ShowDialog();
         });
+
+        public ICommand OpenOuterSortWindow => new CommandDelegate(param =>
+        {
+            OuterSortWindow window = new OuterSortWindow();
+            OuterSortWindowVM vm = new OuterSortWindowVM();
+            window.DataContext = vm;
+            window.ShowDialog();
+        });
     }
 }
