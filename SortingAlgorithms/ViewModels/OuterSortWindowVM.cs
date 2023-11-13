@@ -15,6 +15,8 @@ using System.IO.Packaging;
 using System.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using System.Xml.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.ConstrainedExecution;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -436,35 +438,39 @@ namespace SortingAlgorithms.ViewModels
                 _segments = 1;
                 int count = 0;
                 int fileNo = 1;
+                bool flag = true;
+                DataRow prev = DataTable.Rows[0];
+                AddRowInTable(prev, DataTableA);
                 foreach (DataRow row in DataTable.Rows)
                 {
-                    if (fileNo > 3)
+                    if(flag)
                     {
-                        fileNo = 1;
-
+                        flag = false;
+                        continue;
                     }
-                    if (fileNo == 1)
+                    DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                    string tempA = string.Format("{0}", prev[myColunm.ToString()]);
+                    string tempB = string.Format("{0}", row[myColunm.ToString()]);
+                    if(CompareDifferentTypes(tempB, tempA))
+                    {
+                        _segments++;
+                    }
+                    if (_segments % 3 == 1)
                     {
                         AddRowInTable(row, DataTableA);
                         await Task.Delay(10);
                     }
-                    else if (fileNo == 2)
+                    else if (_segments % 3 == 2)
                     {
-                        AddRowInTable(row, DataTableB);
-                        await Task.Delay(10);
+                       AddRowInTable(row, DataTableB);
+                       await Task.Delay(10);
                     }
-                    else if (fileNo == 3)
+                    else
                     {
                         AddRowInTable(row, DataTableC);
                         await Task.Delay(10);
                     }
-                    count++;
-                    if(count == _iterations)
-                    {
-                        fileNo++;
-                        count = 0;
-                        _segments++;
-                    }
+                    prev = row;
                 }
 
                 if (_segments == 1)
@@ -494,6 +500,18 @@ namespace SortingAlgorithms.ViewModels
                         counterA = _iterations;
                         counterB = _iterations;
                         counterC = _iterations;
+                    }
+                    if (endA)
+                    {
+                        counterA = 0;
+                    }
+                    if (endB)
+                    {
+                        counterB = 0;
+                    }
+                    if (endC)
+                    {
+                        counterC = 0;
                     }
 
                     if (positionA != DataTableA.Rows.Count)
