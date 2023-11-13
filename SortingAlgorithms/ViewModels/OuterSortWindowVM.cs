@@ -98,6 +98,7 @@ namespace SortingAlgorithms.ViewModels
         //для сортировки
         private int _iterations = 1;
         private int _segments;
+        private int _columnNumber;
 
         public ICommand Sort => new CommandDelegate(param =>
         {
@@ -199,7 +200,8 @@ namespace SortingAlgorithms.ViewModels
 
                 if (_segments == 1)
                 {
-                    Steps.Add($"Таблица отсортирована по полю {SelectedColumn}");
+                    Steps.Add($"Все элементы оказались в одной таблице\n" +
+                        $"Таблица отсортирована по полю {SelectedColumn}");
                     break;
                 }
 
@@ -270,14 +272,13 @@ namespace SortingAlgorithms.ViewModels
                     {
                         if (pickedB)
                         {
-                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
-                            string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
-                            string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
-                            Steps.Add($"Сравниваем элементы {tempA} и {tempB}");
+                            string tempA = string.Format("{0}", newRowA[_columnNumber]);
+                            string tempB = string.Format("{0}", newRowB[_columnNumber]);
+                            Steps.Add($"Сравниваем {tempA} и {tempB}");
                             if (CompareDifferentTypes(tempA, tempB))
                             {
                                 Steps.Add($"{tempA} < {tempB} \n" +
-                                    $"Добавляем {tempA} в результирующую таблицу");
+                                    $"Добавляем {tempA} в таблицу\n");
                                 AddRowInTable(newRowA, DataTable);
                                 counterA--;
                                 pickedA = false;
@@ -287,7 +288,7 @@ namespace SortingAlgorithms.ViewModels
                             else
                             {
                                 Steps.Add($"{tempA} > {tempB} \n" +
-                                    $"Добавляем {tempB} в результирующую таблицу");
+                                    $"Добавляем {tempB} в таблицу\n");
                                 AddRowInTable(newRowB, DataTable);
                                 counterB--;
                                 pickedB = false;
@@ -295,7 +296,7 @@ namespace SortingAlgorithms.ViewModels
                         }
                         else
                         {
-                            Steps.Add($"Добавляем оставшуюся строку из А в результирующую таблицу");
+                            Steps.Add($"Добавляем оставшуюся строку из А в таблицу\n");
                             AddRowInTable(newRowA, DataTable);
                             counterA--;
                             pickedA = false;
@@ -305,6 +306,7 @@ namespace SortingAlgorithms.ViewModels
                     }
                     else if (pickedB)
                     {
+                        Steps.Add($"Добавляем оставшуюся строку из В в таблицу\n");
                         AddRowInTable(newRowB, DataTable);
                         counterB--;
                         pickedB = false;
@@ -315,7 +317,9 @@ namespace SortingAlgorithms.ViewModels
                     currentPA += positionA;
                     currentPB += positionB;
                 }
-                _iterations *= 2; // увеличиваем размер серии в 2 раза
+                Steps.Add($"Закончили слияние А и В\n" +
+                    $"Увеличиваем размер серии: {_iterations} * 2 = {_iterations * 2}\n");
+                _iterations *= 2;
                 DataTableA.Rows.Clear();
                 DataTableB.Rows.Clear();
             }
@@ -447,8 +451,6 @@ namespace SortingAlgorithms.ViewModels
             while (true)
             {
                 _segments = 1;
-                int count = 0;
-                int fileNo = 1;
                 bool flag = true;
                 DataRow prev = DataTable.Rows[0];
                 AddRowInTable(prev, DataTableA);
@@ -459,9 +461,8 @@ namespace SortingAlgorithms.ViewModels
                         flag = false;
                         continue;
                     }
-                    DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
-                    string tempA = string.Format("{0}", prev[myColunm.ToString()]);
-                    string tempB = string.Format("{0}", row[myColunm.ToString()]);
+                    string tempA = string.Format("{0}", prev[_columnNumber]);
+                    string tempB = string.Format("{0}", row[_columnNumber]);
                     if(CompareDifferentTypes(tempB, tempA))
                     {
                         _segments++;
@@ -488,7 +489,6 @@ namespace SortingAlgorithms.ViewModels
                 {
                     break;
                 }
-
                 DataTable.Rows.Clear();
                 DataRow newRowA = DataTable.NewRow();
                 DataRow newRowB = DataTable.NewRow();
@@ -498,10 +498,9 @@ namespace SortingAlgorithms.ViewModels
                 int counterC = _iterations;
                 bool pickedA = false, pickedB = false, pickedC = false, endA = false, endB = false, endC = false;
                 int positionA = 0; int positionB = 0; int positionC = 0;
-                int currentPA = 0; int currentPB = 0; int currentPC = 0;
                 while (true)
                 {
-                    if (endA && endB && endC)
+                    if (endA && endB && endC && pickedA == false && pickedB == false && pickedC == false)
                     {
                         break;
                     }
@@ -585,14 +584,13 @@ namespace SortingAlgorithms.ViewModels
                     {
                         if (pickedB)
                         {
-                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
-                            string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
-                            string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
+                            string tempA = string.Format("{0}", newRowA[_columnNumber]);
+                            string tempB = string.Format("{0}", newRowB[_columnNumber]);
                             if (CompareDifferentTypes(tempA, tempB))
                             {
                                 if (pickedC)
                                 {
-                                    string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                                    string tempC = string.Format("{0}", newRowC[_columnNumber]);
                                     if (CompareDifferentTypes(tempA, tempC))
                                     {
                                         AddRowInTable(newRowA, DataTable);
@@ -620,7 +618,7 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 if (pickedC)
                                 {
-                                    string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                                    string tempC = string.Format("{0}", newRowC[_columnNumber]);
                                     if (CompareDifferentTypes(tempB, tempC))
                                     {
                                         AddRowInTable(newRowB, DataTable);
@@ -647,9 +645,8 @@ namespace SortingAlgorithms.ViewModels
                         }
                         else if (pickedC)
                         {
-                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
-                            string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
-                            string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                            string tempA = string.Format("{0}", newRowA[_columnNumber]);
+                            string tempC = string.Format("{0}", newRowC[_columnNumber]);
                             if (CompareDifferentTypes(tempA, tempC))
                             {
                                 AddRowInTable(newRowA, DataTable);
@@ -677,9 +674,8 @@ namespace SortingAlgorithms.ViewModels
                     {
                         if (pickedC)
                         {
-                            DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
-                            string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
-                            string tempC = string.Format("{0}", newRowC[myColunm.ToString()]);
+                            string tempB = string.Format("{0}", newRowB[_columnNumber]);
+                            string tempC = string.Format("{0}", newRowC[_columnNumber]);
                             if (CompareDifferentTypes(tempB, tempC))
                             {
                                 AddRowInTable(newRowB, DataTable);
@@ -710,9 +706,6 @@ namespace SortingAlgorithms.ViewModels
                         pickedC = false;
                         await Task.Delay(_delayInSeconds);
                     }
-                    currentPA += positionA;
-                    currentPB += positionB;
-                    currentPC += positionC;
                 }
                 _iterations *= 2; // увеличиваем размер серии в 2 раза
                 DataTableA.Rows.Clear();
@@ -740,7 +733,7 @@ namespace SortingAlgorithms.ViewModels
                 MessageBox.Show("Выберите поле и алгоритм сортировки");
                 return false;
             }
-
+            _columnNumber = TableReader.GetColumnNumber(SelectedColumn, _scheme);
             return true;
         }
     }

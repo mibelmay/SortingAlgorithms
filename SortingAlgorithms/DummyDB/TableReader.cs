@@ -170,7 +170,7 @@ namespace SortingAlgorithms.DummyDB
             File.WriteAllText(folderPath + $"\\{table.Scheme.Name}.csv", newFile.ToString());
         }
 
-        public int GetColumnNumber(string columnName, TableScheme scheme)
+        public static int GetColumnNumber(string columnName, TableScheme scheme)
         {
             int count = 0;
             foreach(Column column in scheme.Columns)
