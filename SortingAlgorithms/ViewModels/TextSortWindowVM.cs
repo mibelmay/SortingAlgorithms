@@ -12,6 +12,7 @@ namespace SortingAlgorithms.ViewModels
 {
     public class TextSortWindowVM : ViewModel
     {
+        private bool _isLoaded = false;
         private string _initialText;
         public string InitialText
         {
@@ -54,7 +55,12 @@ namespace SortingAlgorithms.ViewModels
 
         public ICommand Sort => new CommandDelegate(param =>
         {
-            if(!Check())
+            if (!_isLoaded)
+            {
+                MessageBox.Show("Выберите файл с текстом");
+                return;
+            }
+            if (!Check())
             {
                 MessageBox.Show("Выберите сортировку");
                 return;
@@ -117,6 +123,7 @@ namespace SortingAlgorithms.ViewModels
                 }
                 string text = Parser.LoadText(path);
                 InitialText = text;
+                _isLoaded = true;
             }
             catch (Exception ex)
             {

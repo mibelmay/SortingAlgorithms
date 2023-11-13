@@ -8,15 +8,6 @@ using System.Windows.Input;
 using SortingAlgorithms.Models;
 using SortingAlgorithms.DummyDB;
 using System.Windows.Forms;
-using System.IO;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.IO.Packaging;
-using System.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using System.Xml.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.ConstrainedExecution;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -94,6 +85,13 @@ namespace SortingAlgorithms.ViewModels
                 OnPropertyChanged();
             }
         }
+        private string _delay;
+        public string Delay
+        {
+            get { return _delay; }
+            set { _delay = value; OnPropertyChanged(); }
+        }
+        private int _delayInSeconds;
 
         //для сортировки
         private int _iterations = 1;
@@ -101,6 +99,7 @@ namespace SortingAlgorithms.ViewModels
 
         public ICommand Sort => new CommandDelegate(param =>
         {
+            if (!Check()) { return; }
             SelectSort();
         });
         private void SelectSort()
@@ -182,13 +181,13 @@ namespace SortingAlgorithms.ViewModels
 
                         AddRowInTable(row, DataTableA);
                         counter++;
-                        await Task.Delay(1000);
+                        await Task.Delay(_delayInSeconds);
                     }
                     else
                     {
                         AddRowInTable(row, DataTableB);
                         counter++;
-                        await Task.Delay(1000);
+                        await Task.Delay(_delayInSeconds);
                     }
                     counter1++;
 
@@ -274,7 +273,7 @@ namespace SortingAlgorithms.ViewModels
                                 counterA--;
                                 pickedA = false;
 
-                                await Task.Delay(1000);
+                                await Task.Delay(_delayInSeconds);
                             }
                             else
                             {
@@ -289,7 +288,7 @@ namespace SortingAlgorithms.ViewModels
                             counterA--;
                             pickedA = false;
 
-                            await Task.Delay(1000);
+                            await Task.Delay(_delayInSeconds);
                         }
                     }
                     else if (pickedB)
@@ -298,7 +297,7 @@ namespace SortingAlgorithms.ViewModels
                         counterB--;
                         pickedB = false;
 
-                        await Task.Delay(1000);
+                        await Task.Delay(_delayInSeconds);
                     }
 
                     currentPA += positionA;
@@ -458,17 +457,17 @@ namespace SortingAlgorithms.ViewModels
                     if (_segments % 3 == 1)
                     {
                         AddRowInTable(row, DataTableA);
-                        await Task.Delay(10);
+                        await Task.Delay(_delayInSeconds);
                     }
                     else if (_segments % 3 == 2)
                     {
                        AddRowInTable(row, DataTableB);
-                       await Task.Delay(10);
+                       await Task.Delay(_delayInSeconds);
                     }
                     else
                     {
                         AddRowInTable(row, DataTableC);
-                        await Task.Delay(10);
+                        await Task.Delay(_delayInSeconds);
                     }
                     prev = row;
                 }
@@ -587,14 +586,14 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowA, DataTable);
                                         counterA--;
                                         pickedA = false;
-                                        await Task.Delay(10);
+                                        await Task.Delay(_delayInSeconds);
                                     }
                                     else
                                     {
                                         AddRowInTable(newRowC, DataTable);
                                         counterC--;
                                         pickedC = false;
-                                        await Task.Delay(10);
+                                        await Task.Delay(_delayInSeconds);
                                     }
                                 }
                                 else
@@ -602,7 +601,7 @@ namespace SortingAlgorithms.ViewModels
                                     AddRowInTable(newRowA, DataTable);
                                     counterA--;
                                     pickedA = false;
-                                    await Task.Delay(10);
+                                    await Task.Delay(_delayInSeconds);
                                 }
                             }
                             else
@@ -615,14 +614,14 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowB, DataTable);
                                         counterB--;
                                         pickedB = false;
-                                        await Task.Delay(10);
+                                        await Task.Delay(_delayInSeconds);
                                     }
                                     else
                                     {
                                         AddRowInTable(newRowC, DataTable);
                                         counterC--;
                                         pickedC = false;
-                                        await Task.Delay(10);
+                                        await Task.Delay(_delayInSeconds);
                                     }
                                 }
                                 else
@@ -630,7 +629,7 @@ namespace SortingAlgorithms.ViewModels
                                     AddRowInTable(newRowB, DataTable);
                                     counterB--;
                                     pickedB = false;
-                                    await Task.Delay(10);
+                                    await Task.Delay(_delayInSeconds);
                                 }
                             }
                         }
@@ -644,14 +643,14 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowA, DataTable);
                                 counterA--;
                                 pickedA = false;
-                                await Task.Delay(10);
+                                await Task.Delay(_delayInSeconds);
                             }
                             else
                             {
                                 AddRowInTable(newRowC, DataTable);
                                 counterC--;
                                 pickedC = false;
-                                await Task.Delay(10);
+                                await Task.Delay(_delayInSeconds);
                             }
                         }
                         else
@@ -659,7 +658,7 @@ namespace SortingAlgorithms.ViewModels
                             AddRowInTable(newRowA, DataTable);
                             counterA--;
                             pickedA = false;
-                            await Task.Delay(10);
+                            await Task.Delay(_delayInSeconds);
                         }
                     }
                     else if (pickedB)
@@ -674,14 +673,14 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowB, DataTable);
                                 counterB--;
                                 pickedB = false;
-                                await Task.Delay(10);
+                                await Task.Delay(_delayInSeconds);
                             }
                             else
                             {
                                 AddRowInTable(newRowC, DataTable);
                                 counterC--;
                                 pickedC = false;
-                                await Task.Delay(10);
+                                await Task.Delay(_delayInSeconds);
                             }
                         }
                         else
@@ -689,7 +688,7 @@ namespace SortingAlgorithms.ViewModels
                             AddRowInTable(newRowB, DataTable);
                             counterB--;
                             pickedB = false;
-                            await Task.Delay(10);
+                            await Task.Delay(_delayInSeconds);
                         }
                     }
                     else if (pickedC)
@@ -697,7 +696,7 @@ namespace SortingAlgorithms.ViewModels
                         AddRowInTable(newRowC, DataTable);
                         counterC--;
                         pickedC = false;
-                        await Task.Delay(10);
+                        await Task.Delay(_delayInSeconds);
                     }
                     currentPA += positionA;
                     currentPB += positionB;
@@ -710,6 +709,26 @@ namespace SortingAlgorithms.ViewModels
             }
             ChangeMainTable();
             TableReader.SaveChangesToCsv(_table, _folderPath);
+        }
+        private bool Check()
+        {
+            if (_folderPath == "")
+            {
+                MessageBox.Show("Выберите файл с таблицей");
+                return false;
+            }
+            if (!double.TryParse(_delay, out double millis))
+            {
+                Delay = "Incorrect";
+                return false;
+            }
+            _delayInSeconds = (int) (millis * 1000);
+            if(SelectedSort == null || SelectedSort == "" || SelectedColumn == null || SelectedColumn == "")
+            {
+                MessageBox.Show("Выберите поле и алгоритм сортировки");
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:SortingAlgorithms.ViewModels"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="OuterSortWindow" Height="600" Width="800" Background="#222222">
+        Title="OuterSortWindow" Height="600" Width="1000" Background="#222222">
     <Window.DataContext>
         <vm:OuterSortWindowVM/>
     </Window.DataContext>
@@ -25,9 +25,19 @@
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
         <TextBox  Grid.Column="1" Grid.Row ="1" FontSize="20"  Text="Таблица A" Background="LightGray"/>
-
+        <TextBox  Grid.Column="5" Grid.Row ="1" FontSize="20"  Text="Шаги" Background="LightGray"/>
+        <Grid Grid.Row="3" Grid.Column="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Delay:" FontSize="15" Foreground="#FFFEF7" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox Text="{Binding Delay}" Grid.Column="1" Grid.Row="1" FontSize="15" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        </Grid>
 
         <TextBox  Grid.Column="3" Grid.Row ="1" FontSize="20" Text="Главная таблица">
             <TextBox.Background>
