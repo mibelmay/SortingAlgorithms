@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Documents;
 
 namespace SortingAlgorithms.DummyDB
@@ -167,6 +168,20 @@ namespace SortingAlgorithms.DummyDB
                 newFile.AppendLine(newRow);
             }
             File.WriteAllText(folderPath + $"\\{table.Scheme.Name}.csv", newFile.ToString());
+        }
+
+        public int GetColumnNumber(string columnName, TableScheme scheme)
+        {
+            int count = 0;
+            foreach(Column column in scheme.Columns)
+            {
+                if(column.Name == columnName)
+                {
+                    return count;
+                }
+                count++;
+            }
+            throw new Exception("Такой колонки нет");
         }
 
     }

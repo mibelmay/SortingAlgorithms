@@ -8,11 +8,13 @@ using System.Windows.Input;
 using SortingAlgorithms.Models;
 using SortingAlgorithms.DummyDB;
 using System.Windows.Forms;
+using System.Collections.ObjectModel;
 
 namespace SortingAlgorithms.ViewModels
 {
     class OuterSortWindowVM : ViewModel
     {
+        public ObservableCollection<string> Steps { get; set; } = new ObservableCollection<string>();
         private string _folderPath = "";
         private TableScheme _scheme;
         private Table _table;
@@ -165,11 +167,11 @@ namespace SortingAlgorithms.ViewModels
                 _segments = 1;
                 int counter = 0;
                 bool flag = true;
-                int counter1 = 0;
+                int counter1 = 1;
+                Steps.Add($"Разделяем исходную таблицу на две таблицы:\n" +
+                    $"добавляем элементы с шагом {_iterations}\n");
                 foreach (DataRow row in DataTable.Rows)
                 {
-                    // если достигли количества элементов в последовательности -
-                    // меняем флаг для след. файла и обнуляем счетчик количества
                     if (counter == _iterations)
                     {
                         flag = !flag;
@@ -178,13 +180,14 @@ namespace SortingAlgorithms.ViewModels
                     }
                     if (flag)
                     {
-
+                        Steps.Add($"Добавляем строку {counter1} в таблицу А\n");
                         AddRowInTable(row, DataTableA);
                         counter++;
                         await Task.Delay(_delayInSeconds);
                     }
                     else
                     {
+                        Steps.Add($"Добавляем строку {counter1} в таблицу В\n");
                         AddRowInTable(row, DataTableB);
                         counter++;
                         await Task.Delay(_delayInSeconds);
@@ -196,6 +199,7 @@ namespace SortingAlgorithms.ViewModels
 
                 if (_segments == 1)
                 {
+                    Steps.Add($"Таблица отсортирована по полю {SelectedColumn}");
                     break;
                 }
 
@@ -209,6 +213,8 @@ namespace SortingAlgorithms.ViewModels
                 int positionB = 0;
                 int currentPA = 0;
                 int currentPB = 0;
+                Steps.Add($"Начинаем сливать таблицы А и В\n" +
+                    $"Будем сравнивать элементы сериями по {_iterations}\n");
                 while(true)
                 {
                     if (endA && endB)
@@ -267,8 +273,11 @@ namespace SortingAlgorithms.ViewModels
                             DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
                             string tempA = string.Format("{0}", newRowA[myColunm.ToString()]);
                             string tempB = string.Format("{0}", newRowB[myColunm.ToString()]);
+                            Steps.Add($"Сравниваем элементы {tempA} и {tempB}");
                             if (CompareDifferentTypes(tempA, tempB))
                             {
+                                Steps.Add($"{tempA} < {tempB} \n" +
+                                    $"Добавляем {tempA} в результирующую таблицу");
                                 AddRowInTable(newRowA, DataTable);
                                 counterA--;
                                 pickedA = false;
@@ -277,6 +286,8 @@ namespace SortingAlgorithms.ViewModels
                             }
                             else
                             {
+                                Steps.Add($"{tempA} > {tempB} \n" +
+                                    $"Добавляем {tempB} в результирующую таблицу");
                                 AddRowInTable(newRowB, DataTable);
                                 counterB--;
                                 pickedB = false;
@@ -284,6 +295,7 @@ namespace SortingAlgorithms.ViewModels
                         }
                         else
                         {
+                            Steps.Add($"Добавляем оставшуюся строку из А в результирующую таблицу");
                             AddRowInTable(newRowA, DataTable);
                             counterA--;
                             pickedA = false;
@@ -728,6 +740,7 @@ namespace SortingAlgorithms.ViewModels
                 MessageBox.Show("Выберите поле и алгоритм сортировки");
                 return false;
             }
+
             return true;
         }
     }
