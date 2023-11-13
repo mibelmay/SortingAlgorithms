@@ -75,8 +75,8 @@ namespace SortingAlgorithms.ViewModels
                     InsertionTextSort insertionSort = new InsertionTextSort();
                     return profiler.RunExtra(words, insertionSort);
                 case "ABC sort":
-                    BubbleSort bubbleSort = new BubbleSort();
-                    return profiler.RunExtra(words, bubbleSort);
+                    ABCSortAlgorithm ABCSort = new ABCSortAlgorithm();
+                    return profiler.RunExtra(words, ABCSort);
                 default:
                     return null;
             }
