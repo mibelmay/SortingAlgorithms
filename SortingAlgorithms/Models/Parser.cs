@@ -35,5 +35,18 @@ namespace SortingAlgorithms.Models
             string text = File.ReadAllText(path);
             return text;
         }
+
+        public static List<Element> GenerateVector()
+        {
+            List<Element> vector = new List<Element>();
+            Random random = new Random();
+            int element;
+            for (int i = 0; i < 45; i++)
+            {
+                element = random.Next(-100, 100);
+                vector.Add(new Element(i, element));
+            }
+            return vector;
+        }
     }
 }

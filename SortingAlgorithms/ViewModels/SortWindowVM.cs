@@ -11,6 +11,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using static System.Net.Mime.MediaTypeNames;
+using System.IO;
+
 namespace SortingAlgorithms.ViewModels
 {
     public class SortWindowVM : ViewModel
@@ -45,17 +47,12 @@ namespace SortingAlgorithms.ViewModels
                 OnPropertyChanged();
             }
         }
-        private string _delay;
-        public string Delay
+        private int _slider = 1000;
+        public int Slider
         {
-            get { return _delay; }
-            set
-            {
-                _delay = value;
-                OnPropertyChanged();
-            }
+            get { return _slider; }
+            set { _slider = value; OnPropertyChanged(); }
         }
-        private double delayInSeconds;
         public ObservableCollection<string> Comments { get; set; } = new ObservableCollection<string>();
 
         public List<Element> Array { get; set; } // максимум/минимум 100/-100
@@ -72,6 +69,13 @@ namespace SortingAlgorithms.ViewModels
             }
             GetReady(Array);
             SelectSort();
+        });
+
+        public ICommand GenerateArray => new CommandDelegate(param =>
+        {
+            Comments.Clear();
+            Array = Parser.GenerateVector();
+            GetReady(Array);
         });
 
         public void GetReady(List<Element> array)
@@ -119,6 +123,8 @@ namespace SortingAlgorithms.ViewModels
                     column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
                     column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
                 }
+                column.RadiusX = 2;
+                column.RadiusY = 2;
                 column.StrokeThickness = 1;
                 Canvas.Children.Add(column);
             }
@@ -163,33 +169,23 @@ namespace SortingAlgorithms.ViewModels
             {
                 _movement = movement;
                 GetReady(movement.Elements);
-                await Task.Delay((int)(delayInSeconds * 1000));
+                await Task.Delay(2010 - Slider);
             }
             Comments.Add("Массив отсортирован!");
         }
 
         public bool Check()
         {
-            if (!double.TryParse(Delay, out double seconds))
-            {
-                Delay = "Incorrect";
-                return false;
-            }
-            if (seconds > 5)
-            {
-                Delay = "Too much";
-                return false;
-            }
             if (SortName == null || SortName == "")
             {
                 MessageBox.Show("Выберите сортировку");
                 return false;
             }
-            delayInSeconds = seconds;
             return true;
         }
         public ICommand LoadArray => new CommandDelegate(param => 
         {
+            Comments.Clear();
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
