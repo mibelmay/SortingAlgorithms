@@ -34,12 +34,7 @@
         <TextBox  Grid.Column="1" Grid.Row ="1" FontSize="20"  Text="Таблица A" Background="LightGray"/>
         <TextBox  Grid.Column="5" Grid.Row ="1" FontSize="20"  Text="Шаги" Background="LightGray"/>
         <Grid Grid.Row="3" Grid.Column="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Delay:" FontSize="15" Foreground="#FFFEF7" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox Text="{Binding Delay}" Grid.Column="1" Grid.Row="1" FontSize="15" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Slider Value="{Binding Slider}"  Minimum="0" Maximum="1000" VerticalAlignment="Center"/>
         </Grid>
 
         <TextBox  Grid.Column="3" Grid.Row ="1" FontSize="20" Text="Главная таблица">
