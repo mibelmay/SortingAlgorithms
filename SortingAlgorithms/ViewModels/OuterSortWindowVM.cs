@@ -10,6 +10,7 @@ using SortingAlgorithms.DummyDB;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
+using System.Windows.Controls;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -19,7 +20,7 @@ namespace SortingAlgorithms.ViewModels
         private string _folderPath = "";
         private TableScheme _scheme;
         private Table _table;
-        public List<string> SortNames { get; set; } = new List<string>() { "Прямое слияние" , "Трехпутевое слияние"};
+        public List<string> SortNames { get; set; } = new List<string>() { "Прямое слияние" , "Естественное слияние", "Трехпутевое слияние"};
         private string _selectedSort;
         public string SelectedSort
         {
@@ -112,6 +113,9 @@ namespace SortingAlgorithms.ViewModels
             {
                 case "Прямое слияние":
                     DoDirectMerge();
+                    break;
+                case "Естественное слияние":
+                    DoNatureMerge();
                     break;
                 case "Трехпутевое слияние":
                     DoThreeWayMerge();
@@ -728,6 +732,161 @@ namespace SortingAlgorithms.ViewModels
                 DataTableA.Rows.Clear();
                 DataTableB.Rows.Clear();
                 DataTableC.Rows.Clear();
+            }
+            ChangeMainTable();
+            TableReader.SaveChangesToCsv(_table, _folderPath);
+        }
+
+
+
+        //Natural Merge
+        private void DoNatureMerge()
+        {
+            _iterations = 1;
+            _segments = 1;
+            DataTable dataTable = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                dataTable.Columns.Add(column.Name);
+            }
+            DataTableA.Rows.Clear();
+            DataTableA = dataTable;
+            DataTable dataTable1 = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                dataTable1.Columns.Add(column.Name);
+            }
+            DataTableB.Rows.Clear();
+            DataTableB = dataTable1;
+            DoNatureSort();
+        }
+        private List<int> _series = new List<int>();
+
+        async void DoNatureSort()
+        {
+            while (true)
+            {
+                _segments = 1;
+                DataRow prev = DataTable.Rows[0];
+                bool flag = true;
+                bool flagf = true;
+                AddRowInTable(prev, DataTableA);
+                int counter = 0;
+                foreach (DataRow cur in DataTable.Rows)
+                {
+                    if (flagf)
+                    {
+                        flagf = false;
+                        continue;
+                    }
+                    DataColumn myColunm = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                    string tempA = string.Format("{0}", prev[myColunm.ToString()]);
+                    string tempB = string.Format("{0}", cur[myColunm.ToString()]);
+                    if (CompareDifferentTypes(tempB, tempA))
+                    {
+                        flag = !flag;
+                        _segments++;
+                        _series.Add(counter + 1);
+                        counter = 0;
+                    }
+                    if (flag)
+                    {
+                        AddRowInTable(cur, DataTableA);
+                        await Task.Delay(_delayInSeconds);
+                        counter++;
+                    }
+                    else
+                    {
+                        AddRowInTable(cur, DataTableB);
+                        await Task.Delay(_delayInSeconds);
+                        counter++;
+                    }
+                    prev = cur;
+                }
+
+                if (_segments == 1)
+                {
+                    break;
+                }
+
+                DataTable.Rows.Clear();
+                DataRow newRowA = DataTable.NewRow();
+                DataRow newRowB = DataTable.NewRow();
+                DataRow newRowC = DataTable.NewRow();
+
+                bool pickedA = false, pickedB = false;
+                int positionA = 0, positionB = 0;
+                int seriaA = 0; int seriaB = 0;
+                int indA = 0; int indB = 1;
+                while (positionA != DataTableA.Rows.Count || positionB != DataTableB.Rows.Count || pickedA || pickedB)
+                {
+                    if (positionA != DataTableA.Rows.Count)
+                    {
+                        if (_series[indA] != seriaA && !pickedA)
+                        {
+                            newRowA = DataTableA.Rows[positionA];
+                            pickedA = true;
+                            positionA += 1;
+                        }
+                        if (_series[indA] == seriaA && indA <= _series.Count - 1)
+                        {
+                            pickedA = false;
+                            indA += 2;
+                            seriaA = 0;
+                        }
+                    }
+                    if (positionB != DataTableB.Rows.Count)
+                    {
+                        if (_series[indB] != seriaB && !pickedB)
+                        {
+                            newRowB = DataTableB.Rows[positionB];
+                            pickedB = true;
+                            positionB += 1;
+                        }
+                        if (_series[indB] == seriaB && indB <= _series.Count - 1)
+                        {
+                            pickedB = false;
+                            indB += 2;
+                            seriaB = 0;
+                        }
+                    }
+                    DataColumn myColumn = DataTable.Columns.Cast<DataColumn>().SingleOrDefault(col => col.ColumnName == SelectedColumn);
+                    string tempA = string.Format("{0}", newRowA[myColumn.ToString()]);
+                    string tempB = string.Format("{0}", newRowB[myColumn.ToString()]);
+                    string tempC = string.Format("{0}", newRowC[myColumn.ToString()]);
+                    if (pickedA)
+                    {
+                        if (pickedB)
+                        {
+                            if (CompareDifferentTypes(tempA, tempB))
+                            {
+                                AddRowInTable(newRowA, DataTable);
+                                pickedA = false;
+                                await Task.Delay(_delayInSeconds);
+                            }
+                            else
+                            {
+                                AddRowInTable(newRowB, DataTable);
+                                pickedB = false;
+                                await Task.Delay(_delayInSeconds);
+                            }
+                        }
+                        else
+                        {
+                            AddRowInTable(newRowA, DataTable);
+                            pickedA = false;
+                            await Task.Delay(_delayInSeconds);
+                        }
+                    }
+                    else if (pickedB)
+                    {
+                        AddRowInTable(newRowB, DataTable);
+                        pickedB = false;
+                        await Task.Delay(_delayInSeconds);
+                    }
+                }
+                DataTableA.Rows.Clear();
+                DataTableB.Rows.Clear();
             }
             ChangeMainTable();
             TableReader.SaveChangesToCsv(_table, _folderPath);
