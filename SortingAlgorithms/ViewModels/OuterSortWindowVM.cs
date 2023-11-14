@@ -89,7 +89,7 @@ namespace SortingAlgorithms.ViewModels
                 OnPropertyChanged();
             }
         }
-        private int _slider;
+        private int _slider = 500;
         public int Slider
         {
             get { return _slider; }
@@ -189,14 +189,14 @@ namespace SortingAlgorithms.ViewModels
                         Steps.Add($"Добавляем строку {counter1} в таблицу А\n");
                         AddRowInTable(row, DataTableA);
                         counter++;
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                     else
                     {
                         Steps.Add($"Добавляем строку {counter1} в таблицу В\n");
                         AddRowInTable(row, DataTableB);
                         counter++;
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                     counter1++;
 
@@ -288,7 +288,7 @@ namespace SortingAlgorithms.ViewModels
                                 counterA--;
                                 pickedA = false;
 
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                             else
                             {
@@ -306,7 +306,7 @@ namespace SortingAlgorithms.ViewModels
                             counterA--;
                             pickedA = false;
 
-                            await Task.Delay(1000 - Slider);
+                            await Task.Delay(1010 - Slider);
                         }
                     }
                     else if (pickedB)
@@ -316,7 +316,7 @@ namespace SortingAlgorithms.ViewModels
                         counterB--;
                         pickedB = false;
 
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
 
                     currentPA += positionA;
@@ -482,19 +482,19 @@ namespace SortingAlgorithms.ViewModels
                     {
                         Steps.Add($"Добавляем строку {count} в таблицу А");
                         AddRowInTable(row, DataTableA);
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                     else if (_segments % 3 == 2)
                     {
                         Steps.Add($"Добавляем строку {count} в таблицу В");
                         AddRowInTable(row, DataTableB);
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                     else
                     {
                         Steps.Add($"Добавляем строку {count} в таблицу С");
                         AddRowInTable(row, DataTableC);
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                     prev = row;
                     count++;
@@ -616,7 +616,7 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowA, DataTable);
                                         counterA--;
                                         pickedA = false;
-                                        await Task.Delay(1000 - Slider);
+                                        await Task.Delay(1010 - Slider);
                                     }
                                     else
                                     {
@@ -625,7 +625,7 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowC, DataTable);
                                         counterC--;
                                         pickedC = false;
-                                        await Task.Delay(1000 - Slider);
+                                        await Task.Delay(1010 - Slider);
                                     }
                                 }
                                 else
@@ -635,7 +635,7 @@ namespace SortingAlgorithms.ViewModels
                                     AddRowInTable(newRowA, DataTable);
                                     counterA--;
                                     pickedA = false;
-                                    await Task.Delay(1000 - Slider);
+                                    await Task.Delay(1010 - Slider);
                                 }
                             }
                             else
@@ -650,7 +650,7 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowB, DataTable);
                                         counterB--;
                                         pickedB = false;
-                                        await Task.Delay(1000 - Slider);
+                                        await Task.Delay(1010 - Slider);
                                     }
                                     else
                                     {
@@ -659,7 +659,7 @@ namespace SortingAlgorithms.ViewModels
                                         AddRowInTable(newRowC, DataTable);
                                         counterC--;
                                         pickedC = false;
-                                        await Task.Delay(1000 - Slider);
+                                        await Task.Delay(1010 - Slider);
                                     }
                                 }
                                 else
@@ -669,7 +669,7 @@ namespace SortingAlgorithms.ViewModels
                                     AddRowInTable(newRowB, DataTable);
                                     counterB--;
                                     pickedB = false;
-                                    await Task.Delay(1000 - Slider);
+                                    await Task.Delay(1010 - Slider);
                                 }
                             }
                         }
@@ -684,7 +684,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowA, DataTable);
                                 counterA--;
                                 pickedA = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                             else
                             {
@@ -693,7 +693,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowC, DataTable);
                                 counterC--;
                                 pickedC = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                         }
                         else
@@ -702,7 +702,7 @@ namespace SortingAlgorithms.ViewModels
                             AddRowInTable(newRowA, DataTable);
                             counterA--;
                             pickedA = false;
-                            await Task.Delay(1000 - Slider);
+                            await Task.Delay(1010 - Slider);
                         }
                     }
                     else if (pickedB)
@@ -718,7 +718,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowB, DataTable);
                                 counterB--;
                                 pickedB = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                             else
                             {
@@ -727,7 +727,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowC, DataTable);
                                 counterC--;
                                 pickedC = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                         }
                         else
@@ -736,7 +736,7 @@ namespace SortingAlgorithms.ViewModels
                             AddRowInTable(newRowB, DataTable);
                             counterB--;
                             pickedB = false;
-                            await Task.Delay(1000 - Slider);
+                            await Task.Delay(1010 - Slider);
                         }
                     }
                     else if (pickedC)
@@ -745,7 +745,7 @@ namespace SortingAlgorithms.ViewModels
                         AddRowInTable(newRowC, DataTable);
                         counterC--;
                         pickedC = false;
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                 }
                 Steps.Add($"Закончили слияние А, В и С\n" +
@@ -818,14 +818,14 @@ namespace SortingAlgorithms.ViewModels
                     {
                         Steps.Add($"Записываем строку с {tempB} в таблицу А");
                         AddRowInTable(cur, DataTableA);
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                         counter++;
                     }
                     else
                     {
                         Steps.Add($"Записываем строку с {tempB} в таблицу В");
                         AddRowInTable(cur, DataTableB);
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                         counter++;
                     }
                     prev = cur;
@@ -892,7 +892,7 @@ namespace SortingAlgorithms.ViewModels
                                     $"Добавляем {tempA} в таблицу");
                                 AddRowInTable(newRowA, DataTable);
                                 pickedA = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                             else
                             {
@@ -900,7 +900,7 @@ namespace SortingAlgorithms.ViewModels
                                     $"Добавляем {tempB} в таблицу");
                                 AddRowInTable(newRowB, DataTable);
                                 pickedB = false;
-                                await Task.Delay(1000 - Slider);
+                                await Task.Delay(1010 - Slider);
                             }
                         }
                         else
@@ -908,7 +908,7 @@ namespace SortingAlgorithms.ViewModels
                             Steps.Add($"Добавляем {tempA} из А в таблицу");
                             AddRowInTable(newRowA, DataTable);
                             pickedA = false;
-                            await Task.Delay(1000 - Slider);
+                            await Task.Delay(1010 - Slider);
                         }
                     }
                     else if (pickedB)
@@ -916,7 +916,7 @@ namespace SortingAlgorithms.ViewModels
                         Steps.Add($"Добавляем {tempB} из В в таблицу");
                         AddRowInTable(newRowB, DataTable);
                         pickedB = false;
-                        await Task.Delay(1000 - Slider);
+                        await Task.Delay(1010 - Slider);
                     }
                 }
                 DataTableA.Rows.Clear();

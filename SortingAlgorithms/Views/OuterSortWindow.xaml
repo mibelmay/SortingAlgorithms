@@ -70,7 +70,7 @@
                 <TextBlock Text="Отсортировать по полю:" Foreground="White" Grid.Row="2" Grid.Column="0" FontSize="15"/>
                 <ComboBox ItemsSource="{Binding ColumnNames}" SelectedItem="{Binding SelectedColumn}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
             </Grid>
-            <DataGrid ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" AlternatingRowBackground="LavenderBlush"/>
+            <DataGrid ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -86,20 +86,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            <DataGrid ItemsSource="{Binding DataTableA}" Grid.Column="1" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="True"/>
+            <DataGrid ItemsSource="{Binding DataTableA}" Grid.Column="1" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
             <TextBox Grid.Column="1" Grid.Row ="3" FontSize="20"  Text="Таблица B" Background="LightGray"/>
-            <DataGrid ItemsSource="{Binding DataTableB}" Grid.Column="1" Grid.Row="5" CanUserAddRows="False" AutoGenerateColumns="True"/>
+            <DataGrid ItemsSource="{Binding DataTableB}" Grid.Column="1" Grid.Row="5" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
             <TextBox Grid.Column="1" Grid.Row ="7" FontSize="20"  Text="Таблица C" Background="LightGray"/>
-            <DataGrid ItemsSource="{Binding DataTableC}" Grid.Column="1" Grid.Row="9" CanUserAddRows="False" AutoGenerateColumns="True"/>
+            <DataGrid ItemsSource="{Binding DataTableC}" Grid.Column="1" Grid.Row="9" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
         </Grid>
-       
-        <!--Button Command="{Binding OpenSourceClick}" Content="Взять таблицу из файла" Grid.Column="3" Grid.Row="4" HorizontalAlignment="Left" Width="160" Height="40" VerticalAlignment="Bottom" Background="LightGray"/>
-        <Button Command="{Binding CreateTable_Click}" Content="Создать таблицу" Grid.Column="3" Grid.Row="4" Width="160" Height="40" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="LightGray"/>
-        
-        <Button Command="{Binding Update_Click}" Content="Обновить" Grid.Column="1" Grid.Row="4" Height="40" VerticalAlignment="Top" Margin="0,15,0,0" Background="LightGray"/>
-        <TextBlock Text="Выбрать строку:" Foreground="White"  Grid.Column="1" Grid.Row="4" Margin="0,100,0,0" Height="19" VerticalAlignment="Top"/>
-        <Button Command="{Binding ShowForeignKeys}" Content="Выбрать" Grid.Column="1" Grid.Row="4" Height="20" VerticalAlignment="Top" Margin="174,120,0,0"/>
-        <ComboBox ItemsSource="{Binding ForeignColumnNames}" SelectedItem="{Binding SelectedColumn}" Grid.Column="1" Grid.Row="4" Height="20" Margin="0,80,85,0" VerticalAlignment="Top"/!-->
-        
     </Grid>
 </Window>
