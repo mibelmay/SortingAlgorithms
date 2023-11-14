@@ -26,6 +26,7 @@ namespace SortingAlgorithms.Models
                 Swap(vector, 0, i);
                 Heapify(vector, i, 0);
             }
+            Movements.Add(new Movement(Element.CopyElements(vector), -1, -1));
         }
 
         void Heapify(List<Element> vector, int n, int i)

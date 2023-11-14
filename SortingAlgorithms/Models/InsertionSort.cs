@@ -41,6 +41,7 @@ namespace SortingAlgorithms.Models
                 input[j + 1] = key;
                 Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id));
             }
+            Movements.Add(new Movement(Element.CopyElements(input), -1, -1));
         }
     }
 }

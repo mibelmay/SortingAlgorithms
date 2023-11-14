@@ -42,6 +42,7 @@ namespace SortingAlgorithms.Models
                 step = step / 2;
                 comment += $"Прошли весь массив, теперь уменьшаем шаг: step / 2 = {step}\n";
             }
+            Movements.Add(new Movement(Element.CopyElements(vector), -1, -1));
         }
     }
 }

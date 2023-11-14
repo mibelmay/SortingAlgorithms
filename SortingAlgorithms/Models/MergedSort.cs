@@ -28,6 +28,7 @@ namespace SortingAlgorithms.Models
 
                 Merge(input, left, mid, right);
             }
+            Movements.Add(new Movement(Element.CopyElements(input), -1, -1));
         }
 
         private void Merge(List<Element> input, int left, int mid, int right)

@@ -9,6 +9,7 @@ using SortingAlgorithms.Models;
 using SortingAlgorithms.DummyDB;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Metrics;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -141,6 +142,7 @@ namespace SortingAlgorithms.ViewModels
 
         private void DoDirectMerge() //добавляет колонки во вспомогательные таблицы
         {
+            Steps.Clear();
             _iterations = 1;
             _segments = 1;
             DataTable dataTableA = new DataTable();
@@ -419,6 +421,7 @@ namespace SortingAlgorithms.ViewModels
 
         private void DoThreeWayMerge() //добавляет колонки во вспомогательные таблицы
         {
+            Steps.Clear();
             _iterations = 1;
             _segments = 1;
             DataTable dataTableA = new DataTable();
@@ -451,8 +454,12 @@ namespace SortingAlgorithms.ViewModels
             while (true)
             {
                 _segments = 1;
+                int count = 2;
                 bool flag = true;
+                Steps.Add($"Разделяем исходную таблицу на три таблицы,\n" +
+                   $"ища отсортированные серии\n");
                 DataRow prev = DataTable.Rows[0];
+                Steps.Add($"Добавляем строку 1 в таблицу А\n");
                 AddRowInTable(prev, DataTableA);
                 foreach (DataRow row in DataTable.Rows)
                 {
@@ -465,28 +472,36 @@ namespace SortingAlgorithms.ViewModels
                     string tempB = string.Format("{0}", row[_columnNumber]);
                     if(CompareDifferentTypes(tempB, tempA))
                     {
+                        Steps.Add($"{tempB} > {tempA}, меняем таблицу\n");
                         _segments++;
                     }
+                    Steps.Add($"{tempB} < {tempA}\n");
                     if (_segments % 3 == 1)
                     {
+                        Steps.Add($"Добавляем строку {count} в таблицу А\n");
                         AddRowInTable(row, DataTableA);
                         await Task.Delay(_delayInSeconds);
                     }
                     else if (_segments % 3 == 2)
                     {
-                       AddRowInTable(row, DataTableB);
-                       await Task.Delay(_delayInSeconds);
+                        Steps.Add($"Добавляем строку {count} в таблицу В\n");
+                        AddRowInTable(row, DataTableB);
+                        await Task.Delay(_delayInSeconds);
                     }
                     else
                     {
+                        Steps.Add($"Добавляем строку {count} в таблицу С\n");
                         AddRowInTable(row, DataTableC);
                         await Task.Delay(_delayInSeconds);
                     }
                     prev = row;
+                    count++;
                 }
 
                 if (_segments == 1)
                 {
+                    Steps.Add($"Все элементы оказались в одной таблице\n" +
+                        $"Таблица отсортирована по полю {SelectedColumn}");
                     break;
                 }
                 DataTable.Rows.Clear();
@@ -593,6 +608,8 @@ namespace SortingAlgorithms.ViewModels
                                     string tempC = string.Format("{0}", newRowC[_columnNumber]);
                                     if (CompareDifferentTypes(tempA, tempC))
                                     {
+                                        Steps.Add($"{tempA} < {tempC} \n" +
+                                    $"Добавляем {tempB} в таблицу\n");
                                         AddRowInTable(newRowA, DataTable);
                                         counterA--;
                                         pickedA = false;
