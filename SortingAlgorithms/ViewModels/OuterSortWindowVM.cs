@@ -784,7 +784,8 @@ namespace SortingAlgorithms.ViewModels
             DoNatureSort();
         }
         private List<int> _series = new List<int>();
-
+        private List<int> _seriesA = new List<int>();
+        private List<int> _seriesB = new List<int>();
         async void DoNatureSort()
         {
             while (true)
@@ -843,43 +844,102 @@ namespace SortingAlgorithms.ViewModels
                 DataRow newRowB = DataTable.NewRow();
                 DataRow newRowC = DataTable.NewRow();
 
+                SelectNewSeries(DataTableA, _seriesA);
+                SelectNewSeries(DataTableB, _seriesB);
                 bool pickedA = false, pickedB = false;
                 int positionA = 0, positionB = 0;
-                int seriaA = 0; int seriaB = 0;
-                int indA = 0; int indB = 1;
+                int seriaA = _seriesA[0]; int seriaB = _seriesB[0];
+                int indA = 0; int indB = 0;
+                bool endA = false; bool endB = false;
                 Steps.Add($"Начинаем слияние таблиц А и В\n");
-                while (positionA != DataTableA.Rows.Count || positionB != DataTableB.Rows.Count || pickedA || pickedB)
+                while (true)
                 {
+                    if (endA && endB)
+                    {
+                        break;
+                    }
+
+                    if (seriaA == 0 && seriaB == 0)
+                    {
+                        indA++; indB++;
+                        if (indA <= _seriesA.Count - 1)
+                        {
+                            seriaA = _seriesA[indA];
+                        }
+                        if(indB <= _seriesB.Count - 1)
+                        {
+                            seriaB = _seriesB[indB];
+                        }
+                    }
+
                     if (positionA != DataTableA.Rows.Count)
                     {
-                        if (_series[indA] != seriaA && !pickedA)
+                        if (seriaA > 0)
                         {
-                            newRowA = DataTableA.Rows[positionA];
-                            pickedA = true;
-                            positionA += 1;
-                        }
-                        if (_series[indA] == seriaA && indA <= _series.Count - 1)
-                        {
-                            pickedA = false;
-                            indA += 2;
-                            seriaA = 0;
+                            if (!pickedA)
+                            {
+                                newRowA = DataTableA.Rows[positionA];
+                                positionA += 1;
+                                pickedA = true;
+                            }
                         }
                     }
+                    else
+                    {
+                        endA = true;
+                    }
+
                     if (positionB != DataTableB.Rows.Count)
                     {
-                        if (_series[indB] != seriaB && !pickedB)
+                        if (seriaB > 0)
                         {
-                            newRowB = DataTableB.Rows[positionB];
-                            pickedB = true;
-                            positionB += 1;
-                        }
-                        if (_series[indB] == seriaB && indB <= _series.Count - 1)
-                        {
-                            pickedB = false;
-                            indB += 2;
-                            seriaB = 0;
+                            if (!pickedB)
+                            {
+                                newRowB = DataTableB.Rows[positionB];
+                                positionB += 1;
+                                pickedB = true;
+                            }
                         }
                     }
+                    else
+                    {
+                        endB = true;
+                    }
+
+                    if (endA && endB && pickedA == false && pickedB == false)
+                    {
+                        break;
+                    }
+                    //if (positionA != DataTableA.Rows.Count)
+                    //{
+                    //    if (_series[indA] != seriaA && !pickedA)
+                    //    {
+                    //        newRowA = DataTableA.Rows[positionA];
+                    //        pickedA = true;
+                    //        positionA += 1;
+                    //    }
+                    //    if (_series[indA] == seriaA && indA <= _series.Count - 1)
+                    //    {
+                    //        pickedA = false;
+                    //        indA += 2;
+                    //        seriaA = 0;
+                    //    }
+                    //}
+                    //if (positionB != DataTableB.Rows.Count)
+                    //{
+                    //    if (_series[indB] != seriaB && !pickedB)
+                    //    {
+                    //        newRowB = DataTableB.Rows[positionB];
+                    //        pickedB = true;
+                    //        positionB += 1;
+                    //    }
+                    //    if (_series[indB] == seriaB && indB <= _series.Count - 1)
+                    //    {
+                    //        pickedB = false;
+                    //        indB += 2;
+                    //        seriaB = 0;
+                    //    }
+                    //}
                     string tempA = string.Format("{0}", newRowA[_columnNumber]);
                     string tempB = string.Format("{0}", newRowB[_columnNumber]);
                     if (pickedA)
@@ -892,6 +952,7 @@ namespace SortingAlgorithms.ViewModels
                                     $"Добавляем {tempA} в таблицу");
                                 AddRowInTable(newRowA, DataTable);
                                 pickedA = false;
+                                seriaA--;
                                 await Task.Delay(1010 - Slider);
                             }
                             else
@@ -900,6 +961,7 @@ namespace SortingAlgorithms.ViewModels
                                     $"Добавляем {tempB} в таблицу");
                                 AddRowInTable(newRowB, DataTable);
                                 pickedB = false;
+                                seriaB--;
                                 await Task.Delay(1010 - Slider);
                             }
                         }
@@ -908,6 +970,7 @@ namespace SortingAlgorithms.ViewModels
                             Steps.Add($"Добавляем {tempA} из А в таблицу");
                             AddRowInTable(newRowA, DataTable);
                             pickedA = false;
+                            seriaA--;
                             await Task.Delay(1010 - Slider);
                         }
                     }
@@ -916,6 +979,7 @@ namespace SortingAlgorithms.ViewModels
                         Steps.Add($"Добавляем {tempB} из В в таблицу");
                         AddRowInTable(newRowB, DataTable);
                         pickedB = false;
+                        seriaB--;
                         await Task.Delay(1010 - Slider);
                     }
                 }
@@ -925,6 +989,35 @@ namespace SortingAlgorithms.ViewModels
             }
             ChangeMainTable();
             TableReader.SaveChangesToCsv(_table, _folderPath);
+        }
+
+        private void SelectNewSeries(DataTable dataTable, List<int> series)
+        {
+            series.Clear();
+            string prev = dataTable.Rows[0][_columnNumber].ToString();
+            string cur;
+            int count = 0;
+            for (int i = 1; i < dataTable.Rows.Count; i++)
+            {
+                cur = dataTable.Rows[i][_columnNumber].ToString();
+                if (CompareDifferentTypes(cur, prev))
+                {
+                    series.Add(count + 1);
+                    count = 0;
+                    prev = cur;
+                    if (i == dataTable.Rows.Count - 1)
+                    {
+                        series.Add(count + 1);
+                    }
+                    continue;
+                }
+                count++;
+                if (i == dataTable.Rows.Count - 1)
+                {
+                    series.Add(count + 1);
+                }
+                prev = cur;
+            }
         }
         private bool Check()
         {
