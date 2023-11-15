@@ -783,7 +783,6 @@ namespace SortingAlgorithms.ViewModels
             DataTableB = dataTable1;
             DoNatureSort();
         }
-        private List<int> _series = new List<int>();
         private List<int> _seriesA = new List<int>();
         private List<int> _seriesB = new List<int>();
         async void DoNatureSort()
@@ -796,7 +795,7 @@ namespace SortingAlgorithms.ViewModels
                 AddRowInTable(prev, DataTableA);
                 int counter = 0; int countSerias = 1;
                 Steps.Add($"Разделяем исходную таблицу на две таблицы,\n" +
-                   $"ища и запоминая отсортированные серии\n");
+                   $"ища отсортированные серии\n");
                 Steps.Add($"Записываем первую строку в таблицу А");
                 foreach (DataRow cur in DataTable.Rows)
                 {
@@ -811,8 +810,6 @@ namespace SortingAlgorithms.ViewModels
                     {
                         flag = !flag;
                         _segments++;
-                        _series.Add(counter + 1);
-                        Steps.Add($"В {countSerias} серии {counter + 1} элементов\n");
                         counter = 0; countSerias++;
                     }
                     if (flag)
@@ -842,10 +839,10 @@ namespace SortingAlgorithms.ViewModels
                 DataTable.Rows.Clear();
                 DataRow newRowA = DataTable.NewRow();
                 DataRow newRowB = DataTable.NewRow();
-                DataRow newRowC = DataTable.NewRow();
 
                 SelectNewSeries(DataTableA, _seriesA);
                 SelectNewSeries(DataTableB, _seriesB);
+
                 bool pickedA = false, pickedB = false;
                 int positionA = 0, positionB = 0;
                 int seriaA = _seriesA[0]; int seriaB = _seriesB[0];
@@ -858,20 +855,20 @@ namespace SortingAlgorithms.ViewModels
                     {
                         break;
                     }
-
                     if (seriaA == 0 && seriaB == 0)
                     {
                         indA++; indB++;
                         if (indA <= _seriesA.Count - 1)
                         {
                             seriaA = _seriesA[indA];
+                            Steps.Add($"Следующая серия в таблице A: {seriaA} элементов");
                         }
                         if(indB <= _seriesB.Count - 1)
                         {
                             seriaB = _seriesB[indB];
+                            Steps.Add($"Следующая серия в таблице В: {seriaB} элементов");
                         }
                     }
-
                     if (positionA != DataTableA.Rows.Count)
                     {
                         if (seriaA > 0)
