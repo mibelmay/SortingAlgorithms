@@ -910,36 +910,6 @@ namespace SortingAlgorithms.ViewModels
                     {
                         break;
                     }
-                    //if (positionA != DataTableA.Rows.Count)
-                    //{
-                    //    if (_series[indA] != seriaA && !pickedA)
-                    //    {
-                    //        newRowA = DataTableA.Rows[positionA];
-                    //        pickedA = true;
-                    //        positionA += 1;
-                    //    }
-                    //    if (_series[indA] == seriaA && indA <= _series.Count - 1)
-                    //    {
-                    //        pickedA = false;
-                    //        indA += 2;
-                    //        seriaA = 0;
-                    //    }
-                    //}
-                    //if (positionB != DataTableB.Rows.Count)
-                    //{
-                    //    if (_series[indB] != seriaB && !pickedB)
-                    //    {
-                    //        newRowB = DataTableB.Rows[positionB];
-                    //        pickedB = true;
-                    //        positionB += 1;
-                    //    }
-                    //    if (_series[indB] == seriaB && indB <= _series.Count - 1)
-                    //    {
-                    //        pickedB = false;
-                    //        indB += 2;
-                    //        seriaB = 0;
-                    //    }
-                    //}
                     string tempA = string.Format("{0}", newRowA[_columnNumber]);
                     string tempB = string.Format("{0}", newRowB[_columnNumber]);
                     if (pickedA)
