@@ -34,7 +34,7 @@ namespace SortingAlgorithms.Models
         private void Merge(List<Element> input, int left, int mid, int right)
         {
             comment += $"Рассматриваем подмассивы:\n" +
-                $"[{input[left].Data} - {input[mid].Data}] и [{input[mid+1].Data} - {input[right].Data}]";
+                $"[{input[left].Data} ; {input[mid].Data}] и [{input[mid+1].Data} ; {input[right].Data}]\n";
             int n1 = mid - left + 1;
             int n2 = right - mid;
 
@@ -49,21 +49,22 @@ namespace SortingAlgorithms.Models
 
             int iLeft = 0, iRight = 0, k = left;
 
-            comment += $"Объединяем отсортированные массивы: [{left} - {mid}] и [{mid + 1} - {right}]\n";
+            comment += $"Объединяем отсортированные массивы: [{left} ; {mid}] и [{mid + 1} ; {right}]\n";
 
             while (iLeft < n1 && iRight < n2)
             {
-                comment += $"Сравниваем {leftArr[iLeft].Data} с {rightArr[iRight].Data}\n";
+                Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, rightArr[iRight].Id, comment + $"Сравниваем {leftArr[iLeft].Data} с {rightArr[iRight].Data}"));
+                comment = "";
                 if (leftArr[iLeft].Data <= rightArr[iRight].Data)
                 {
                     input[k] = leftArr[iLeft];
-                    Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, comment));
+                    Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, $"Выбираем {leftArr[iLeft].Data}"));
                     iLeft++;
                 }
                 else
                 {
                     input[k] = rightArr[iRight];
-                    Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, comment));
+                    Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, $", выбираем {rightArr[iRight].Data}"));
                     iRight++;
                 }
 
