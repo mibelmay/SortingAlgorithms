@@ -11,13 +11,15 @@ namespace SortingAlgorithms.Models
         public int IdFrom { get; }
         public int IdTo { get; }
         public List<Element> Elements { get; }
+        public Tuple<Element[], Element[]> MergedArrays { get; }
         public string Comment;
-        public Movement(List<Element> items, int idFrom, int idTo, string comment = "") 
+        public Movement(List<Element> items, int idFrom, int idTo, string comment = "", Tuple<Element[], Element[]> mergedArrays = null)
         {
             Elements = items;
-            IdFrom= idFrom;
-            IdTo= idTo;
-            Comment= comment;
+            IdFrom = idFrom;
+            IdTo = idTo;
+            Comment = comment;
+            MergedArrays = mergedArrays;
         }
     }
 }

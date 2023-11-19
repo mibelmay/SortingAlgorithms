@@ -113,15 +113,19 @@ namespace SortingAlgorithms.ViewModels
                 }
                 Canvas.SetLeft(column, xPosition);
                 xPosition += columnWidth + 2;
+                int i;
                 if(_movement != null && (_movement.IdFrom == item.Id || _movement.IdTo == item.Id))
                 {
                     column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#f6bd60");
-                    column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#f6bd60");
+                }
+                else if (_movement != null && SortName == "Merge Sort" && (i = CheckMerge(_movement.MergedArrays, item)) > 0)
+                {
+                    column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#e26d5c");
+                    //column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#723d46");
                 }
                 else
                 {
                     column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
-                    column.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3b18a");
                 }
                 column.RadiusX = 2;
                 column.RadiusY = 2;
@@ -134,6 +138,24 @@ namespace SortingAlgorithms.ViewModels
             }
         }
 
+        private int CheckMerge(Tuple<Element[], Element[]> tuple, Element item)
+        {
+            if (tuple == null) { return 0; }
+
+            for (int i = 0; i < tuple.Item1.Length; i++)
+            {
+                if (tuple.Item1[i].Id == item.Id)
+                {
+                    return 1;
+                }
+                if (i >= tuple.Item2.Length) { continue; }
+                if (tuple.Item2[i].Id == item.Id) 
+                {
+                    return 2;
+                }
+            }
+            return 0;
+        }
         public void SelectSort()
         {
             switch (SortName)

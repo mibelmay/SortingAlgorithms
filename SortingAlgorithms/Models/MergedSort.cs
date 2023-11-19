@@ -20,7 +20,7 @@ namespace SortingAlgorithms.Models
         public void MergeSortAlgorithm(List<Element> input, int left, int right)
         {
             if (left < right)
-            {
+            { 
                 int mid = left + (right - left) / 2;
 
                 MergeSortAlgorithm(input, left, mid);
@@ -40,31 +40,32 @@ namespace SortingAlgorithms.Models
 
             Element[] leftArr = new Element[n1];
             Element[] rightArr = new Element[n2];
-
+            
             for (int i = 0; i < n1; i++)
                 leftArr[i] = input[left + i];
 
             for (int i = 0; i < n2; i++)
                 rightArr[i] = input[mid + 1 + i];
+            Tuple<Element[], Element[]> tuple = new Tuple<Element[], Element[]>(leftArr, rightArr);
+            Movements.Add(new Movement(Element.CopyElements(input), -1, -1, comment, tuple));
+
 
             int iLeft = 0, iRight = 0, k = left;
 
-            comment += $"Объединяем отсортированные массивы: [{left} ; {mid}] и [{mid + 1} ; {right}]\n";
-
             while (iLeft < n1 && iRight < n2)
             {
-                Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, rightArr[iRight].Id, comment + $"Сравниваем {leftArr[iLeft].Data} с {rightArr[iRight].Data}"));
+                Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, rightArr[iRight].Id, comment + $"Сравниваем {leftArr[iLeft].Data} с {rightArr[iRight].Data}", tuple));
                 comment = "";
                 if (leftArr[iLeft].Data <= rightArr[iRight].Data)
                 {
                     input[k] = leftArr[iLeft];
-                    Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, $"Выбираем {leftArr[iLeft].Data}"));
+                    Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, $"Выбираем {leftArr[iLeft].Data}", tuple));
                     iLeft++;
                 }
                 else
                 {
                     input[k] = rightArr[iRight];
-                    Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, $", выбираем {rightArr[iRight].Data}"));
+                    Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, $"Выбираем {rightArr[iRight].Data}", tuple));
                     iRight++;
                 }
 
@@ -75,7 +76,7 @@ namespace SortingAlgorithms.Models
             while (iLeft < n1)
             {
                 input[k] = leftArr[iLeft];
-                Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, comment));
+                Movements.Add(new Movement(Element.CopyElements(input), leftArr[iLeft].Id, -1, comment, tuple));
                 iLeft++;
                 k++;
                 comment = ""; 
@@ -84,7 +85,7 @@ namespace SortingAlgorithms.Models
             while (iRight < n2)
             {
                 input[k] = rightArr[iRight];
-                Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, comment));
+                Movements.Add(new Movement(Element.CopyElements(input), -1, rightArr[iRight].Id, comment, tuple));
                 iRight++;
                 k++;
                 comment = ""; 
