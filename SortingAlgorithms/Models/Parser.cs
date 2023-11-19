@@ -43,7 +43,7 @@ namespace SortingAlgorithms.Models
             int element;
             for (int i = 0; i < 45; i++)
             {
-                element = random.Next(-100, 100);
+                element = random.Next(1, 100);
                 vector.Add(new Element(i, element));
             }
             return vector;

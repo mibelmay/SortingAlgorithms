@@ -24,13 +24,18 @@
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="200"/>
             </Grid.RowDefinitions>
-            <Canvas>
+            <Canvas Grid.Row="1">
                 <ContentPresenter Content="{Binding Canvas}" />
-                <Rectangle Fill="Wheat" Height="2" Width="870" RadiusX="2" RadiusY="2" Canvas.Left="10" Stroke="#FFFEF7" Canvas.Bottom="235" />
+                <Rectangle Fill="Wheat" Height="2" Width="870" RadiusX="2" RadiusY="2" Canvas.Left="10" Stroke="#FFFEF7" Canvas.Bottom="1" />
             </Canvas>
-            <Grid Grid.Row="1">
+            <Canvas Grid.Row="0">
+                <ContentPresenter Content="{Binding CanvasMerged}" />
+                <Rectangle Visibility="Hidden" Fill="Wheat" Height="2" Width="870" RadiusX="2" RadiusY="2" Canvas.Left="10" Stroke="#FFFEF7" Canvas.Bottom="1" />
+            </Canvas>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
