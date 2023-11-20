@@ -41,9 +41,9 @@ namespace SortingAlgorithms.Models
             List<Element> vector = new List<Element>();
             Random random = new Random();
             int element;
-            for (int i = 0; i < 45; i++)
+            for (int i = 0; i < 46; i++)
             {
-                element = random.Next(1, 100);
+                element = random.Next(1, 101);
                 vector.Add(new Element(i, element));
             }
             return vector;

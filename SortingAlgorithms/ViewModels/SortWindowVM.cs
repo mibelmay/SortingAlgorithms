@@ -129,10 +129,10 @@ namespace SortingAlgorithms.ViewModels
                 {
                     column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#f6bd60");
                 }
-                else if (_movement != null && SortName == "Merge Sort" && (i = CheckMerge(_movement.MergedArrays, item)) > 0)
+                else if (_movement != null && (SortName == "Merge Sort" || SortName == "Heap Sort") && (i = CheckMerge(_movement.MergedArrays, item)) > 0)
                 {
-                    column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#e26d5c");
-                    //column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#723d46"); 
+                    if (i == 1) { column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#e26d5c"); }
+                    else { column.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#723d46"); }
                 }
                 else
                 {
@@ -200,7 +200,7 @@ namespace SortingAlgorithms.ViewModels
                 {
                     return 1;
                 }
-                if (i >= tuple.Item2.Length) { continue; }
+                if (tuple.Item2 == null || i >= tuple.Item2.Length) { continue; }
                 if (tuple.Item2[i].Id == item.Id) 
                 {
                     return 2;

@@ -57,7 +57,7 @@
                     <ComboBox ItemsSource="{Binding SortNames}" SelectedItem="{Binding SortName}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="15" Grid.Row="0" Grid.Column="1" Margin="15,10,15,10"/>
                     <Slider Value="{Binding Slider}" Minimum="0" Maximum="2000" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
                 </Grid>
-                <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
                     <ItemsControl Foreground="White" ItemsSource="{Binding Comments}" Padding="15,5,5,10">
 
                     </ItemsControl>
