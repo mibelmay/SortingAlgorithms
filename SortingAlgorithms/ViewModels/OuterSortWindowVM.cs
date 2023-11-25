@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace SortingAlgorithms.ViewModels
 {
@@ -89,7 +90,7 @@ namespace SortingAlgorithms.ViewModels
                 OnPropertyChanged();
             }
         }
-        private int _slider = 500;
+        private int _slider = 1000;
         public int Slider
         {
             get { return _slider; }
@@ -100,6 +101,9 @@ namespace SortingAlgorithms.ViewModels
         private int _iterations = 1;
         private int _segments;
         private int _columnNumber;
+        public DataGrid MainDataGrid { get; set; }
+        public DataGrid DataGridA { get; set; }
+        public DataGrid DataGridB { get; set; }
 
         public ICommand Sort => new CommandDelegate(param =>
         {
@@ -133,6 +137,7 @@ namespace SortingAlgorithms.ViewModels
             _table = TableReader.LoadTable(_scheme, _folderPath);
             ColumnNames = TableReader.CreateColumnNamesList(_scheme);
             DataTable = CreateDataTable(_scheme, _table);
+            MainDataGrid.Columns[MainDataGrid.Columns.Count - 1].Visibility = System.Windows.Visibility.Hidden;
         });
 
         private DataTable CreateDataTable(TableScheme scheme, Table table)
@@ -141,6 +146,24 @@ namespace SortingAlgorithms.ViewModels
             TableReader.AddColumnsToDataTable(scheme.Columns, dataTable);
             TableReader.AddRowsToDataTable(table.Rows, dataTable);
             return dataTable;
+        }
+        private void ColorTable(DataTable dataTable, int index, int seria)
+        {
+            DataTable table = new DataTable();
+            foreach(Column column in _scheme.Columns)
+            {
+                table.Columns.Add(column.Name);
+            }
+            foreach(DataRow row in dataTable.Rows)
+            {
+                table.Rows.Add(row.ItemArray);
+            }
+            table.Rows[index]["Seria"] = seria;
+            dataTable.Rows.Clear();
+            foreach(DataRow row in table.Rows)
+            {
+                dataTable.Rows.Add(row.ItemArray);
+            }
         }
 
         private void DoDirectMerge() //добавляет колонки во вспомогательные таблицы
@@ -155,6 +178,7 @@ namespace SortingAlgorithms.ViewModels
             }
             DataTableA.Rows.Clear();
             DataTableA = dataTableA;
+            DataGridA.Columns[DataGridA.Columns.Count - 1].Visibility = System.Windows.Visibility.Collapsed;
             DataTable dataTableB = new DataTable();
             foreach (Column column in _scheme.Columns)
             {
@@ -162,14 +186,15 @@ namespace SortingAlgorithms.ViewModels
             }
             DataTableB.Rows.Clear();
             DataTableB = dataTableB;
-
+            DataGridB.Columns[DataGridB.Columns.Count - 1].Visibility = System.Windows.Visibility.Collapsed;
             DoDirectSort();
         }
-
         async void DoDirectSort()
         {
             while (true)
             {
+                int seriaCounter = 0;
+                int seria = 0;
                 _segments = 1;
                 int counter = 0;
                 bool flag = true;
@@ -183,23 +208,28 @@ namespace SortingAlgorithms.ViewModels
                         flag = !flag;
                         counter = 0;
                         _segments++;
+                        seriaCounter++;
+                        if (seriaCounter == 2)
+                        {
+                            seria = (seria == 0) ? 1 : 0;
+                            seriaCounter = 0;
+                        }
                     }
                     if (flag)
                     {
                         Steps.Add($"Добавляем строку {counter1} в таблицу А\n");
-                        AddRowInTable(row, DataTableA);
+                        AddRowInTable(row, DataTableA, seria);
                         counter++;
-                        await Task.Delay(1010 - Slider);
+                        await Task.Delay(2010 - Slider);
                     }
                     else
                     {
                         Steps.Add($"Добавляем строку {counter1} в таблицу В\n");
-                        AddRowInTable(row, DataTableB);
+                        AddRowInTable(row, DataTableB, seria);
                         counter++;
-                        await Task.Delay(1010 - Slider);
+                        await Task.Delay(2010 - Slider);
                     }
                     counter1++;
-
                 }
                 flag = true;
 
@@ -241,6 +271,7 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedA)
                             {
+                                ColorTable(DataTableA, positionA, 2);
                                 newRowA = DataTableA.Rows[positionA];
                                 positionA += 1;
                                 pickedA = true;
@@ -258,6 +289,7 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedB)
                             {
+                                ColorTable(DataTableB, positionB, 2);
                                 newRowB = DataTableB.Rows[positionB];
                                 positionB += 1;
                                 pickedB = true;
@@ -268,6 +300,7 @@ namespace SortingAlgorithms.ViewModels
                     {
                         endB = true;
                     }
+                    await Task.Delay(2010 - Slider);
 
                     if (endA && endB && pickedA == false && pickedB == false)
                     {
@@ -287,8 +320,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowA, DataTable);
                                 counterA--;
                                 pickedA = false;
-
-                                await Task.Delay(1010 - Slider);
+                                await Task.Delay(2010 - Slider);
                             }
                             else
                             {
@@ -297,6 +329,7 @@ namespace SortingAlgorithms.ViewModels
                                 AddRowInTable(newRowB, DataTable);
                                 counterB--;
                                 pickedB = false;
+                                await Task.Delay(2010 - Slider);
                             }
                         }
                         else
@@ -306,7 +339,7 @@ namespace SortingAlgorithms.ViewModels
                             counterA--;
                             pickedA = false;
 
-                            await Task.Delay(1010 - Slider);
+                            await Task.Delay(2010 - Slider);
                         }
                     }
                     else if (pickedB)
@@ -316,7 +349,7 @@ namespace SortingAlgorithms.ViewModels
                         counterB--;
                         pickedB = false;
 
-                        await Task.Delay(1010 - Slider);
+                        await Task.Delay(2010 - Slider);
                     }
 
                     currentPA += positionA;
@@ -331,9 +364,13 @@ namespace SortingAlgorithms.ViewModels
             ChangeMainTable();
             TableReader.SaveChangesToCsv(_table, _folderPath);
         }
-        private void AddRowInTable(DataRow newRow, DataTable dataTable)
+        private void AddRowInTable(DataRow newRow, DataTable dataTable, int seria = -1)
         {
             dataTable.Rows.Add(newRow.ItemArray);
+            if(seria >= 0 )
+            {
+                dataTable.Rows[dataTable.Rows.Count - 1]["Seria"] = seria;
+            } 
         }
         private void ChangeMainTable()
         {
@@ -767,20 +804,22 @@ namespace SortingAlgorithms.ViewModels
             Steps.Clear();
             _iterations = 1;
             _segments = 1;
-            DataTable dataTable = new DataTable();
+            DataTable dataTableA = new DataTable();
             foreach (Column column in _scheme.Columns)
             {
-                dataTable.Columns.Add(column.Name);
+                dataTableA.Columns.Add(column.Name);
             }
             DataTableA.Rows.Clear();
-            DataTableA = dataTable;
-            DataTable dataTable1 = new DataTable();
+            DataTableA = dataTableA;
+            DataGridA.Columns[DataGridA.Columns.Count - 1].Visibility = System.Windows.Visibility.Collapsed;
+            DataTable dataTableB = new DataTable();
             foreach (Column column in _scheme.Columns)
             {
-                dataTable1.Columns.Add(column.Name);
+                dataTableB.Columns.Add(column.Name);
             }
             DataTableB.Rows.Clear();
-            DataTableB = dataTable1;
+            DataTableB = dataTableB;
+            DataGridB.Columns[DataGridB.Columns.Count - 1].Visibility = System.Windows.Visibility.Collapsed;
             DoNatureSort();
         }
         private List<int> _seriesA = new List<int>();

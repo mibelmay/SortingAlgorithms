@@ -31,6 +31,9 @@ namespace SortingAlgorithms.ViewModels
         {
             OuterSortWindow window = new OuterSortWindow();
             OuterSortWindowVM vm = new OuterSortWindowVM();
+            vm.MainDataGrid = window.MainDataGrid;
+            vm.DataGridA = window.dataGridA;
+            vm.DataGridB = window.dataGridB;
             window.DataContext = vm;
             window.ShowDialog();
         });

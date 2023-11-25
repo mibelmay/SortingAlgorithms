@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingAlgorithms.Views"
         xmlns:vm="clr-namespace:SortingAlgorithms.ViewModels"
+        xmlns:models="clr-namespace:SortingAlgorithms.Models"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="OuterSortWindow" Height="700" Width="1200" Background="#222222">
@@ -34,7 +35,7 @@
         <TextBox  Grid.Column="1" Grid.Row ="1" FontSize="20"  Text="Таблица A" Background="LightGray"/>
         <TextBox  Grid.Column="5" Grid.Row ="1" FontSize="20"  Text="Шаги" Background="LightGray"/>
         <Grid Grid.Row="3" Grid.Column="5">
-            <Slider Value="{Binding Slider}"  Minimum="0" Maximum="1000" VerticalAlignment="Center"/>
+            <Slider Value="{Binding Slider}"  Minimum="0" Maximum="2000" VerticalAlignment="Center"/>
         </Grid>
 
         <TextBox  Grid.Column="3" Grid.Row ="1" FontSize="20" Text="Главная таблица">
@@ -70,7 +71,7 @@
                 <TextBlock Text="Отсортировать по полю:" Foreground="White" Grid.Row="2" Grid.Column="0" FontSize="15"/>
                 <ComboBox ItemsSource="{Binding ColumnNames}" SelectedItem="{Binding SelectedColumn}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
             </Grid>
-            <DataGrid ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
+            <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -86,9 +87,31 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
-            <DataGrid ItemsSource="{Binding DataTableA}" Grid.Column="1" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
+            <DataGrid x:Name="dataGridA" ItemsSource="{Binding DataTableA}" Grid.Column="1" Grid.Row="1" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" >
+                <DataGrid.Resources>
+                    <models:ColorConverter x:Key="ColorConverter"/>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <Binding Converter="{StaticResource ColorConverter}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
             <TextBox Grid.Column="1" Grid.Row ="3" FontSize="20"  Text="Таблица B" Background="LightGray"/>
-            <DataGrid ItemsSource="{Binding DataTableB}" Grid.Column="1" Grid.Row="5" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
+            <DataGrid x:Name="dataGridB" ItemsSource="{Binding DataTableB}" Grid.Column="1" Grid.Row="5" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222">
+                <DataGrid.Resources>
+                    <models:ColorConverter x:Key="ColorConverter"/>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <Binding Converter="{StaticResource ColorConverter}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
             <TextBox Grid.Column="1" Grid.Row ="7" FontSize="20"  Text="Таблица C" Background="LightGray"/>
             <DataGrid ItemsSource="{Binding DataTableC}" Grid.Column="1" Grid.Row="9" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
         </Grid>
