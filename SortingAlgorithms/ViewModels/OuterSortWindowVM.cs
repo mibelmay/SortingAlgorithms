@@ -856,8 +856,10 @@ namespace SortingAlgorithms.ViewModels
                 _segments = 1;
                 DataRow prev = DataTable.Rows[0];
                 bool flag = true; bool isFirst = true;
+                int seriaCounter = 0;
+                string seria = "0";
                 AddRowInTable(prev, DataTableA);
-                int counter = 0; int countSerias = 1;
+                int counter = 0;
                 Steps.Add($"Разделяем исходную таблицу на две таблицы,\n" +
                    $"ища отсортированные серии\n");
                 Steps.Add($"Записываем первую строку в таблицу А");
@@ -874,20 +876,26 @@ namespace SortingAlgorithms.ViewModels
                     {
                         flag = !flag;
                         _segments++;
-                        counter = 0; countSerias++;
+                        counter = 0;
+                        seriaCounter++;
+                        if (seriaCounter == 2)
+                        {
+                            seria = (seria == "0") ? "1" : "0";
+                            seriaCounter = 0;
+                        }
                     }
                     if (flag)
                     {
                         Steps.Add($"Записываем строку с {tempB} в таблицу А");
-                        AddRowInTable(cur, DataTableA);
-                        await Task.Delay(1010 - Slider);
+                        AddRowInTable(cur, DataTableA, seria);
+                        await Task.Delay(2010 - Slider);
                         counter++;
                     }
                     else
                     {
                         Steps.Add($"Записываем строку с {tempB} в таблицу В");
-                        AddRowInTable(cur, DataTableB);
-                        await Task.Delay(1010 - Slider);
+                        AddRowInTable(cur, DataTableB, seria);
+                        await Task.Delay(2010 - Slider);
                         counter++;
                     }
                     prev = cur;
@@ -910,6 +918,8 @@ namespace SortingAlgorithms.ViewModels
                 bool pickedA = false, pickedB = false;
                 int positionA = 0, positionB = 0;
                 int seriaA = _seriesA[0]; int seriaB = _seriesB[0];
+                string strSeriaA = "0";
+                string strSeriaB = "0";
                 int indA = 0; int indB = 0;
                 bool endA = false; bool endB = false;
                 Steps.Add($"Начинаем слияние таблиц А и В\n");
@@ -939,7 +949,8 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedA)
                             {
-                                newRowA = DataTableA.Rows[positionA];
+                                strSeriaA = string.Format("{0}", DataTableA.Rows[positionA]["Seria"]);
+                                ColorTable(DataTableA, positionA, "2");
                                 positionA += 1;
                                 pickedA = true;
                             }
@@ -956,7 +967,8 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedB)
                             {
-                                newRowB = DataTableB.Rows[positionB];
+                                strSeriaB = string.Format("{0}", DataTableB.Rows[positionB]["Seria"]);
+                                ColorTable(DataTableB, positionB, "2");
                                 positionB += 1;
                                 pickedB = true;
                             }
@@ -971,8 +983,10 @@ namespace SortingAlgorithms.ViewModels
                     {
                         break;
                     }
-                    string tempA = string.Format("{0}", newRowA[_columnNumber]);
-                    string tempB = string.Format("{0}", newRowB[_columnNumber]);
+                    await Task.Delay(2010 - Slider);
+
+                    string tempA = string.Format("{0}", DataTableA.Rows[positionA - 1][_columnNumber]);
+                    string tempB = string.Format("{0}", DataTableB.Rows[positionB - 1][_columnNumber]);
                     if (pickedA)
                     {
                         if (pickedB)
@@ -981,37 +995,41 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 Steps.Add($"{tempA} < {tempB} \n" +
                                     $"Добавляем {tempA} в таблицу");
-                                AddRowInTable(newRowA, DataTable);
+                                ColorTable(DataTableA, positionA - 1, strSeriaA);
+                                AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                                 pickedA = false;
                                 seriaA--;
-                                await Task.Delay(1010 - Slider);
+                                await Task.Delay(2010 - Slider);
                             }
                             else
                             {
                                 Steps.Add($"{tempA} > {tempB} \n" +
                                     $"Добавляем {tempB} в таблицу");
-                                AddRowInTable(newRowB, DataTable);
+                                ColorTable(DataTableB, positionB - 1, strSeriaB);
+                                AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                                 pickedB = false;
                                 seriaB--;
-                                await Task.Delay(1010 - Slider);
+                                await Task.Delay(2010 - Slider);
                             }
                         }
                         else
                         {
                             Steps.Add($"Добавляем {tempA} из А в таблицу");
-                            AddRowInTable(newRowA, DataTable);
+                            ColorTable(DataTableA, positionA - 1, strSeriaA);
+                            AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                             pickedA = false;
                             seriaA--;
-                            await Task.Delay(1010 - Slider);
+                            await Task.Delay(2010 - Slider);
                         }
                     }
                     else if (pickedB)
                     {
                         Steps.Add($"Добавляем {tempB} из В в таблицу");
-                        AddRowInTable(newRowB, DataTable);
+                        ColorTable(DataTableB, positionB - 1, strSeriaB);
+                        AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                         pickedB = false;
                         seriaB--;
-                        await Task.Delay(1010 - Slider);
+                        await Task.Delay(2010 - Slider);
                     }
                 }
                 DataTableA.Rows.Clear();
@@ -1025,29 +1043,46 @@ namespace SortingAlgorithms.ViewModels
         private void SelectNewSeries(DataTable dataTable, List<int> series)
         {
             series.Clear();
+            string seria = "0";
             string prev = dataTable.Rows[0][_columnNumber].ToString();
             string cur;
+            DataTable temp = new DataTable();
+            foreach (Column column in _scheme.Columns)
+            {
+                temp.Columns.Add(column.Name);
+            }
+            AddRowInTable(dataTable.Rows[0], temp, seria);
             int count = 0;
             for (int i = 1; i < dataTable.Rows.Count; i++)
             {
                 cur = dataTable.Rows[i][_columnNumber].ToString();
                 if (CompareDifferentTypes(cur, prev))
                 {
+                    seria = (seria == "0") ? "1" : "0";
+                    AddRowInTable(dataTable.Rows[i], temp, seria);
                     series.Add(count + 1);
                     count = 0;
                     prev = cur;
                     if (i == dataTable.Rows.Count - 1)
                     {
                         series.Add(count + 1);
+                        seria = (seria == "0") ? "1" : "0";
                     }
                     continue;
                 }
                 count++;
+                AddRowInTable(dataTable.Rows[i], temp, seria);
                 if (i == dataTable.Rows.Count - 1)
                 {
                     series.Add(count + 1);
+                    seria = (seria == "0") ? "1" : "0";
                 }
                 prev = cur;
+            }
+            dataTable.Rows.Clear();
+            foreach(DataRow row in temp.Rows)
+            {
+                dataTable.Rows.Add(row.ItemArray);
             }
         }
         private bool Check()
