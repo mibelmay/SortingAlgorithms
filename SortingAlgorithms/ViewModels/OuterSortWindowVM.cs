@@ -245,8 +245,6 @@ namespace SortingAlgorithms.ViewModels
                 }
 
                 DataTable.Rows.Clear();
-                DataRow newRowA = DataTable.NewRow();
-                DataRow newRowB = DataTable.NewRow();
                 int counterA = _iterations;
                 int counterB = _iterations;
                 bool pickedA = false, pickedB = false, endA = false, endB = false;
@@ -279,7 +277,6 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 seriaA = string.Format("{0}", DataTableA.Rows[positionA]["Seria"]);
                                 ColorTable(DataTableA, positionA, "2");
-                                newRowA = DataTableA.Rows[positionA];
                                 positionA += 1;
                                 pickedA = true;
                             }
@@ -298,7 +295,6 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 seriaB = string.Format("{0}", DataTableB.Rows[positionB]["Seria"]);
                                 ColorTable(DataTableB, positionB, "2");
-                                newRowB = DataTableB.Rows[positionB];
                                 positionB += 1;
                                 pickedB = true;
                             }
@@ -508,27 +504,16 @@ namespace SortingAlgorithms.ViewModels
             while (true)
             {
                 _segments = 1;
-                int count = 2;
-                bool flag = true;
+                int countLine = 2;
                 string seria = "0";
                 int seriaCount = 0;
-                Steps.Add($"Разделяем исходную таблицу на три таблицы,\n" +
-                   $"ища отсортированные серии");
-                DataRow prev = DataTable.Rows[0];
-                Steps.Add($"Добавляем строку 1 в таблицу А");
-                AddRowInTable(prev, DataTableA);
+                int countIterations = 0;
+                Steps.Add($"Разделяем исходную таблицу на три таблицы");
                 foreach (DataRow row in DataTable.Rows)
                 {
-                    if(flag)
+                    if(countIterations == _iterations)
                     {
-                        flag = false;
-                        continue;
-                    }
-                    string tempA = string.Format("{0}", prev[_columnNumber]);
-                    string tempB = string.Format("{0}", row[_columnNumber]);
-                    if(CompareDifferentTypes(tempB, tempA))
-                    {
-                        Steps.Add($"{tempB} < {tempA}, меняем таблицу");
+                        Steps.Add($"Mеняем таблицу");
                         _segments++;
                         seriaCount++;
                         if (seriaCount == 3)
@@ -536,27 +521,28 @@ namespace SortingAlgorithms.ViewModels
                             seria = (seria == "0") ? "1" : "0";
                             seriaCount = 0;
                         }
+                        countIterations = 0;
                     }
                     if (_segments % 3 == 1)
                     {
-                        Steps.Add($"Добавляем строку {count} в таблицу А");
+                        Steps.Add($"Добавляем строку {countLine} в таблицу А");
                         AddRowInTable(row, DataTableA, seria);
                         await Task.Delay(2010 - Slider);
                     }
                     else if (_segments % 3 == 2)
                     {
-                        Steps.Add($"Добавляем строку {count} в таблицу В");
+                        Steps.Add($"Добавляем строку {countLine} в таблицу В");
                         AddRowInTable(row, DataTableB, seria);
                         await Task.Delay(2010 - Slider);
                     }
                     else
                     {
-                        Steps.Add($"Добавляем строку {count} в таблицу С");
+                        Steps.Add($"Добавляем строку {countLine} в таблицу С");
                         AddRowInTable(row, DataTableC, seria);
                         await Task.Delay(2010 - Slider);
                     }
-                    prev = row;
-                    count++;
+                    countLine++;
+                    countIterations++;
                 }
 
                 if (_segments == 1)
@@ -566,12 +552,12 @@ namespace SortingAlgorithms.ViewModels
                     break;
                 }
                 DataTable.Rows.Clear();
-                DataRow newRowA = DataTable.NewRow();
-                DataRow newRowB = DataTable.NewRow();
-                DataRow newRowC = DataTable.NewRow();
                 int counterA = _iterations;
                 int counterB = _iterations;
                 int counterC = _iterations;
+                string seriaA = "0";
+                string seriaB = "0";
+                string seriaC = "0";
                 bool pickedA = false, pickedB = false, pickedC = false, endA = false, endB = false, endC = false;
                 int positionA = 0; int positionB = 0; int positionC = 0;
                 Steps.Add($"Начинаем слияние таблиц А, В и С\n");
@@ -607,7 +593,8 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedA)
                             {
-                                newRowA = DataTableA.Rows[positionA];
+                                seriaA = string.Format("{0}", DataTableA.Rows[positionA]["Seria"]);
+                                ColorTable(DataTableA, positionA, "2");
                                 positionA += 1;
                                 pickedA = true;
                             }
@@ -624,7 +611,8 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedB)
                             {
-                                newRowB = DataTableB.Rows[positionB];
+                                seriaB = string.Format("{0}", DataTableB.Rows[positionB]["Seria"]);
+                                ColorTable(DataTableB, positionB, "2");
                                 positionB += 1;
                                 pickedB = true;
                             }
@@ -641,7 +629,8 @@ namespace SortingAlgorithms.ViewModels
                         {
                             if (!pickedC)
                             {
-                                newRowC = DataTableC.Rows[positionC];
+                                seriaC = string.Format("{0}", DataTableC.Rows[positionC]["Seria"]);
+                                ColorTable(DataTableC, positionC, "2");
                                 positionC += 1;
                                 pickedC = true;
                             }
@@ -656,23 +645,25 @@ namespace SortingAlgorithms.ViewModels
                     {
                         break;
                     }
+                    await Task.Delay(2010 - Slider);
 
                     if (pickedA)
                     {
                         if (pickedB)
                         {
-                            string tempA = string.Format("{0}", newRowA[_columnNumber]);
-                            string tempB = string.Format("{0}", newRowB[_columnNumber]);
+                            string tempA = string.Format("{0}", DataTableA.Rows[positionA - 1][_columnNumber]);
+                            string tempB = string.Format("{0}", DataTableB.Rows[positionB - 1][_columnNumber]);
                             if (CompareDifferentTypes(tempA, tempB))
                             {
                                 if (pickedC)
                                 {
-                                    string tempC = string.Format("{0}", newRowC[_columnNumber]);
+                                    string tempC = string.Format("{0}", DataTableC.Rows[positionC - 1][_columnNumber]);
                                     if (CompareDifferentTypes(tempA, tempC))
                                     {
                                         Steps.Add($"{tempA} < {tempC} \n" +
                                     $"Добавляем {tempA} в таблицу\n");
-                                        AddRowInTable(newRowA, DataTable);
+                                        ColorTable(DataTableA, positionA - 1, seriaA);
+                                        AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                                         counterA--;
                                         pickedA = false;
                                         await Task.Delay(2010 - Slider);
@@ -681,7 +672,8 @@ namespace SortingAlgorithms.ViewModels
                                     {
                                         Steps.Add($"{tempA} > {tempC} \n" +
                                     $"Добавляем {tempC} в таблицу\n");
-                                        AddRowInTable(newRowC, DataTable);
+                                        ColorTable(DataTableC, positionC - 1, seriaC);
+                                        AddRowInTable(DataTableC.Rows[positionC - 1], DataTable);
                                         counterC--;
                                         pickedC = false;
                                         await Task.Delay(2010 - Slider);
@@ -691,7 +683,8 @@ namespace SortingAlgorithms.ViewModels
                                 {
                                     Steps.Add($"{tempA} < {tempB} \n" +
                                     $"Добавляем {tempA} в таблицу\n");
-                                    AddRowInTable(newRowA, DataTable);
+                                    ColorTable(DataTableA, positionA - 1, seriaA);
+                                    AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                                     counterA--;
                                     pickedA = false;
                                     await Task.Delay(2010 - Slider);
@@ -701,12 +694,13 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 if (pickedC)
                                 {
-                                    string tempC = string.Format("{0}", newRowC[_columnNumber]);
+                                    string tempC = string.Format("{0}", DataTableC.Rows[positionC - 1][_columnNumber]);
                                     if (CompareDifferentTypes(tempB, tempC))
                                     {
                                         Steps.Add($"{tempB} < {tempC} \n" +
                                     $"Добавляем {tempB} в таблицу\n");
-                                        AddRowInTable(newRowB, DataTable);
+                                        ColorTable(DataTableB, positionB - 1, seriaB);
+                                        AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                                         counterB--;
                                         pickedB = false;
                                         await Task.Delay(2010 - Slider);
@@ -715,7 +709,8 @@ namespace SortingAlgorithms.ViewModels
                                     {
                                         Steps.Add($"{tempB} > {tempC} \n" +
                                     $"Добавляем {tempC} в таблицу\n");
-                                        AddRowInTable(newRowC, DataTable);
+                                        ColorTable(DataTableC, positionC - 1, seriaC);
+                                        AddRowInTable(DataTableC.Rows[positionC - 1], DataTable);
                                         counterC--;
                                         pickedC = false;
                                         await Task.Delay(2010 - Slider);
@@ -725,7 +720,8 @@ namespace SortingAlgorithms.ViewModels
                                 {
                                     Steps.Add($"{tempA} > {tempB} \n" +
                                     $"Добавляем {tempB} в таблицу\n");
-                                    AddRowInTable(newRowB, DataTable);
+                                    ColorTable(DataTableB, positionB - 1, seriaB);
+                                    AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                                     counterB--;
                                     pickedB = false;
                                     await Task.Delay(2010 - Slider);
@@ -734,13 +730,14 @@ namespace SortingAlgorithms.ViewModels
                         }
                         else if (pickedC)
                         {
-                            string tempA = string.Format("{0}", newRowA[_columnNumber]);
-                            string tempC = string.Format("{0}", newRowC[_columnNumber]);
+                            string tempA = string.Format("{0}", DataTableA.Rows[positionA - 1][_columnNumber]);
+                            string tempC = string.Format("{0}", DataTableC.Rows[positionC - 1][_columnNumber]);
                             if (CompareDifferentTypes(tempA, tempC))
                             {
                                 Steps.Add($"{tempA} < {tempC} \n" +
                                     $"Добавляем {tempA} в таблицу\n");
-                                AddRowInTable(newRowA, DataTable);
+                                ColorTable(DataTableA, positionA - 1, seriaA);
+                                AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                                 counterA--;
                                 pickedA = false;
                                 await Task.Delay(2010 - Slider);
@@ -749,7 +746,8 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 Steps.Add($"{tempA} > {tempC} \n" +
                                     $"Добавляем {tempC} в таблицу\n");
-                                AddRowInTable(newRowC, DataTable);
+                                ColorTable(DataTableC, positionC - 1, seriaC);
+                                AddRowInTable(DataTableC.Rows[positionC - 1], DataTable);
                                 counterC--;
                                 pickedC = false;
                                 await Task.Delay(2010 - Slider);
@@ -758,7 +756,8 @@ namespace SortingAlgorithms.ViewModels
                         else
                         {
                             Steps.Add($"Добавляем оставшуюся строку из А в таблицу\n");
-                            AddRowInTable(newRowA, DataTable);
+                            ColorTable(DataTableA, positionA - 1, seriaA);
+                            AddRowInTable(DataTableA.Rows[positionA - 1], DataTable);
                             counterA--;
                             pickedA = false;
                             await Task.Delay(2010 - Slider);
@@ -768,13 +767,14 @@ namespace SortingAlgorithms.ViewModels
                     {
                         if (pickedC)
                         {
-                            string tempB = string.Format("{0}", newRowB[_columnNumber]);
-                            string tempC = string.Format("{0}", newRowC[_columnNumber]);
+                            string tempB = string.Format("{0}", DataTableB.Rows[positionB - 1][_columnNumber]);
+                            string tempC = string.Format("{0}", DataTableC.Rows[positionC - 1][_columnNumber]);
                             if (CompareDifferentTypes(tempB, tempC))
                             {
                                 Steps.Add($"{tempB} < {tempC} \n" +
                                     $"Добавляем {tempB} в таблицу\n");
-                                AddRowInTable(newRowB, DataTable);
+                                ColorTable(DataTableB, positionB - 1, seriaB);
+                                AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                                 counterB--;
                                 pickedB = false;
                                 await Task.Delay(2010 - Slider);
@@ -783,7 +783,8 @@ namespace SortingAlgorithms.ViewModels
                             {
                                 Steps.Add($"{tempB} > {tempC} \n" +
                                     $"Добавляем {tempC} в таблицу\n");
-                                AddRowInTable(newRowC, DataTable);
+                                ColorTable(DataTableC, positionC - 1, seriaC);
+                                AddRowInTable(DataTableC.Rows[positionC - 1], DataTable);
                                 counterC--;
                                 pickedC = false;
                                 await Task.Delay(2010 - Slider);
@@ -792,7 +793,8 @@ namespace SortingAlgorithms.ViewModels
                         else
                         {
                             Steps.Add($"Добавляем оставшуюся строку из В в таблицу\n");
-                            AddRowInTable(newRowB, DataTable);
+                            ColorTable(DataTableB, positionB - 1, seriaB);
+                            AddRowInTable(DataTableB.Rows[positionB - 1], DataTable);
                             counterB--;
                             pickedB = false;
                             await Task.Delay(2010 - Slider);
@@ -801,7 +803,8 @@ namespace SortingAlgorithms.ViewModels
                     else if (pickedC)
                     {
                         Steps.Add($"Добавляем оставшуюся строку из С в таблицу\n");
-                        AddRowInTable(newRowC, DataTable);
+                        ColorTable(DataTableC, positionC - 1, seriaC);
+                        AddRowInTable(DataTableC.Rows[positionC - 1], DataTable);
                         counterC--;
                         pickedC = false;
                         await Task.Delay(2010 - Slider);
@@ -809,7 +812,7 @@ namespace SortingAlgorithms.ViewModels
                 }
                 Steps.Add($"Закончили слияние А, В и С\n" +
                     $"Увеличиваем размер серии: {_iterations} * 2 = {_iterations * 2}\n");
-                _iterations *= 3; // увеличиваем размер серии в 2 раза
+                _iterations *= 3; // увеличиваем размер серии в 3 раза
                 DataTableA.Rows.Clear();
                 DataTableB.Rows.Clear();
                 DataTableC.Rows.Clear();
