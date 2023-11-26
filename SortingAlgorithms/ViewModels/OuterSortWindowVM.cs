@@ -134,6 +134,7 @@ namespace SortingAlgorithms.ViewModels
             {
                 _folderPath = openFolderDialog.SelectedPath;
             }
+            if (_folderPath== null || _folderPath == "") { MessageBox.Show("Выберите таблицу"); return; } 
             _scheme = TableReader.LoadScheme(_folderPath);
             _table = TableReader.LoadTable(_scheme, _folderPath);
             ColumnNames = TableReader.CreateColumnNamesList(_scheme);

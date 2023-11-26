@@ -23,25 +23,31 @@ namespace SortingAlgorithms.Models
                 Element key = input[i];
                 int j = i - 1;
 
-                comment += $"Сравниваем {key.Data} с элементами, стоящими слева\n";
+                Movements.Add(new Movement(Element.CopyElements(input), -1, key.Id, $"Сравниваем {key.Data} с элементами, стоящими слева"));
                 while (j >= 0 && input[j].Data > key.Data)
                 {
                     comment += $"{input[j].Data} > {key.Data}\n" +
-                        $"смещаем {input[j].Data} вправо";
+                        $"смещаем {key.Data} влево";
                     Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id, comment));
                     comment = "";
 
-                    input[j + 1] = input[j];
+                    //input[j + 1] = input[j];
+                    Swap(input, j, j + 1);
                     Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id));
                     j = j - 1;
                 }
-                comment += $"Ставим {key.Data} на правильное место";
-                Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id, comment));
-                comment = "";
-                input[j + 1] = key;
-                Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id));
+                Movements.Add(new Movement(Element.CopyElements(input), key.Id, -1, $"{key.Data} встал на правильное место"));
+                //input[j + 1] = key;
+                //Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id));
             }
             Movements.Add(new Movement(Element.CopyElements(input), -1, -1));
+        }
+
+        private void Swap(List<Element> vector, int i, int j)
+        {
+            Element temp = vector[i];
+            vector[i] = vector[j];
+            vector[j] = temp;
         }
     }
 }
