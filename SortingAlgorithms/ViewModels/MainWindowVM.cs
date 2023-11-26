@@ -34,6 +34,7 @@ namespace SortingAlgorithms.ViewModels
             vm.MainDataGrid = window.MainDataGrid;
             vm.DataGridA = window.dataGridA;
             vm.DataGridB = window.dataGridB;
+            vm.DataGridC = window.dataGridC;
             window.DataContext = vm;
             window.ShowDialog();
         });

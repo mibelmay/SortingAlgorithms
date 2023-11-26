@@ -113,7 +113,18 @@
                 </DataGrid.Resources>
             </DataGrid>
             <TextBox Grid.Column="1" Grid.Row ="7" FontSize="20"  Text="Таблица C" Background="LightGray"/>
-            <DataGrid ItemsSource="{Binding DataTableC}" Grid.Column="1" Grid.Row="9" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
+            <DataGrid x:Name="dataGridC" ItemsSource="{Binding DataTableC}" Grid.Column="1" Grid.Row="9" CanUserAddRows="False" AutoGenerateColumns="True" Foreground="#aad576" Background="#222222">
+                <DataGrid.Resources>
+                    <models:ColorConverter x:Key="ColorConverter"/>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <Binding Converter="{StaticResource ColorConverter}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
         </Grid>
     </Grid>
 </Window>
