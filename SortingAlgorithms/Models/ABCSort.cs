@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SortingAlgorithms.Models
 {
-    //Alphabetical Bubble Sort | O(n^2)
     public class ABCSortAlgorithm : IAlgorithm<string>
     {
         public void Execute(string[] array)

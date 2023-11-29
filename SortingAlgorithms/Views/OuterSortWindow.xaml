@@ -71,7 +71,7 @@
                 <TextBlock Text="Отсортировать по полю:" Foreground="White" Grid.Row="2" Grid.Column="0" FontSize="15"/>
                 <ComboBox ItemsSource="{Binding ColumnNames}" SelectedItem="{Binding SelectedColumn}" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
             </Grid>
-            <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" Foreground="#aad576" Background="#222222" RowBackground="#132a13" AlternatingRowBackground="DarkGreen"/>
+            <DataGrid x:Name="MainDataGrid" ItemsSource="{Binding DataTable}" Grid.Row="1" AutoGenerateColumns="True" CanUserAddRows="False" Foreground="#aad576" Background="#222222" RowBackground="#2f3e46"/>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>

@@ -30,15 +30,11 @@ namespace SortingAlgorithms.Models
                         $"смещаем {key.Data} влево";
                     Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id, comment));
                     comment = "";
-
-                    //input[j + 1] = input[j];
                     Swap(input, j, j + 1);
                     Movements.Add(new Movement(Element.CopyElements(input), input[j + 1].Id, input[j].Id));
                     j = j - 1;
                 }
                 Movements.Add(new Movement(Element.CopyElements(input), key.Id, -1, $"{key.Data} встал на правильное место"));
-                //input[j + 1] = key;
-                //Movements.Add(new Movement(Element.CopyElements(input), key.Id, input[j + 1].Id));
             }
             Movements.Add(new Movement(Element.CopyElements(input), -1, -1));
         }

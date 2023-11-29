@@ -206,6 +206,16 @@ namespace SortingAlgorithms.ViewModels
                     return 2;
                 }
             }
+            if (tuple.Item1.Length == 0)
+            {
+                for (int i = 0; i < tuple.Item2.Length; i++)
+                {
+                    if (tuple.Item2[i].Id == item.Id)
+                    {
+                        return 2;
+                    }
+                }
+            }
             return 0;
         }
         public void SelectSort()

@@ -918,6 +918,7 @@ namespace SortingAlgorithms.ViewModels
 
                 bool pickedA = false, pickedB = false;
                 int positionA = 0, positionB = 0;
+                if(_seriesB.Count > 0) { }
                 int seriaA = _seriesA[0]; int seriaB = _seriesB[0];
                 string strSeriaA = "0";
                 string strSeriaB = "0";
@@ -1079,6 +1080,10 @@ namespace SortingAlgorithms.ViewModels
                     seria = (seria == "0") ? "1" : "0";
                 }
                 prev = cur;
+            }
+            if(dataTable.Rows.Count == 0) 
+            {
+                series.Add(1);
             }
             dataTable.Rows.Clear();
             foreach(DataRow row in temp.Rows)

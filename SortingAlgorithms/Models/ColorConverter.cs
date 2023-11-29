@@ -22,11 +22,11 @@ namespace SortingAlgorithms.Models
                 switch (status)
                 {
                     case "0":
-                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#723d46");
+                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#38040e");
                     case "1":
-                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#e26d5c");
+                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#640d14");
                     case "2":
-                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#344e41");
+                        return (SolidColorBrush)new BrushConverter().ConvertFrom("#2f3e46");
                     default:
                         return DependencyProperty.UnsetValue;
                 }
